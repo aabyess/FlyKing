@@ -1,0 +1,617 @@
+{
+ "created": "2026-09-13 13:51:01",
+ "method": "PAM: 회색 대조군 8회 평균+3.0SD. 다가가기(oDN1·P9) 좋아요: 기준 릴스 30개 67백분위(대조군 문턱 이상). PPL1 좋아요 상한: 67백분위, 처벌 넘기기: 90백분위. GF: brain_body_bridge 0.3×200Hz.",
+ "model": "Shiu et al. 2024, FlyWire v783, model.py default_params",
+ "input": {
+  "mode": "vpn",
+  "rate_max_hz": 150.0,
+  "feature_ref": {
+   "lum": 0.835528,
+   "loom_dark": 0.33557,
+   "loom_any": 0.402685,
+   "small": 0.120355,
+   "wide_h": 1.113606,
+   "wide_v": 0.805883,
+   "lum_change": 7.726945
+  },
+  "vpn_groups": {
+   "LC4": {
+    "n": 104,
+    "weights": {
+     "loom_dark": 1.0
+    },
+    "source": "von Reyn et al. 2017 Neuron 94:1190 — 루밍 → 거대섬유"
+   },
+   "LC6": {
+    "n": 125,
+    "weights": {
+     "loom_dark": 1.0
+    },
+    "source": "Wu et al. 2016 eLife 5:e21022 — LC6 루밍 반응"
+   },
+   "LC16": {
+    "n": 151,
+    "weights": {
+     "loom_dark": 1.0
+    },
+    "source": "Wu et al. 2016 eLife 5:e21022 — LC16 활성화 시 뒷걸음·회피"
+   },
+   "LPLC2": {
+    "n": 210,
+    "weights": {
+     "loom_any": 1.0
+    },
+    "source": "Klapoetke et al. 2017 Nature 551:237 — 루밍·방사 방향 확장"
+   },
+   "LC11": {
+    "n": 127,
+    "weights": {
+     "small": 1.0
+    },
+    "source": "Keleş & Frye 2017 Curr Biol 27:680 — 작은 움직이는 물체"
+   },
+   "LC10": {
+    "n": 811,
+    "weights": {
+     "small": 1.0
+    },
+    "source": "Ribeiro et al. 2018 Cell 174:607 — 작은 물체 추적"
+   },
+   "HS": {
+    "n": 6,
+    "weights": {
+     "wide_h": 1.0
+    },
+    "source": "Borst, Haag & Reiff 2010 Annu Rev Neurosci 33:49 — 가로 넓은 시야 움직임"
+   },
+   "VS": {
+    "n": 16,
+    "weights": {
+     "wide_v": 1.0
+    },
+    "source": "Borst, Haag & Reiff 2010 — 세로 넓은 시야 움직임"
+   },
+   "MB_VPN": {
+    "n": 53,
+    "weights": {
+     "lum": 0.5,
+     "lum_change": 0.5
+    },
+    "source": "Vogt et al. 2016 eLife 5:e14009 — 버섯체로 가는 시각 투사 뉴런(밝기·색). 유형 = 연결 조회 Kenyon 시냅스 ≥150"
+   }
+  }
+ },
+ "stimulus": {
+  "seconds": 1.0,
+  "fps": 10.0
+ },
+ "n_neurons": {
+  "PAM": 307,
+  "PPL1": 16
+ },
+ "control": {
+  "PAM": {
+   "mean": 0.0,
+   "sd": 0.0,
+   "sd_used": 0.0033,
+   "values": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "PPL1": {
+   "mean": 0.0,
+   "sd": 0.0,
+   "sd_used": 0.0625,
+   "values": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "approach_hz": {
+   "mean": 1.4688,
+   "sd": 0.7955,
+   "sd_used": 0.7955,
+   "values": [
+    2.5,
+    1.5,
+    1.75,
+    1.5,
+    0.25,
+    1.0,
+    2.5,
+    0.75
+   ]
+  },
+  "GF_peak50ms_hz": {
+   "mean": 2.5,
+   "sd": 4.6291,
+   "sd_used": 4.6291,
+   "values": [
+    0.0,
+    0.0,
+    0.0,
+    10.0,
+    0.0,
+    10.0,
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "post_control": {
+  "PAM": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "PPL1": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "approach_hz": [
+   1.25,
+   3.5,
+   3.25
+  ],
+  "washout_spikes": [
+   0,
+   0,
+   0
+  ]
+ },
+ "reference_reels": [
+  {
+   "clip": "clip_00.npz",
+   "author": "b_draw_in",
+   "url": "https://www.instagram.com/reels/DctO14BTtJW/",
+   "PAM": 0.0,
+   "PPL1": 0.75,
+   "approach_hz": 24.0,
+   "GF_peak": 120.0
+  },
+  {
+   "clip": "clip_01.npz",
+   "author": "yingxuan.kr",
+   "url": "https://www.instagram.com/reels/DcTM5bugats/",
+   "PAM": 0.0,
+   "PPL1": 1.188,
+   "approach_hz": 23.0,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_02.npz",
+   "author": "kuyh0o5",
+   "url": "https://www.instagram.com/reels/DcLxJzGhMPZ/",
+   "PAM": 0.0,
+   "PPL1": 1.5,
+   "approach_hz": 27.25,
+   "GF_peak": 50.0
+  },
+  {
+   "clip": "clip_03.npz",
+   "author": "dokgaslighting",
+   "url": "https://www.instagram.com/reels/Dawf9aZh1lu/",
+   "PAM": 0.0,
+   "PPL1": 0.875,
+   "approach_hz": 24.5,
+   "GF_peak": 120.0
+  },
+  {
+   "clip": "clip_04.npz",
+   "author": "ragdollavenue",
+   "url": "https://www.instagram.com/reels/DcnOlcSBN0_/",
+   "PAM": 0.0,
+   "PPL1": 0.625,
+   "approach_hz": 25.5,
+   "GF_peak": 110.0
+  },
+  {
+   "clip": "clip_05.npz",
+   "author": "sudy_s2",
+   "url": "https://www.instagram.com/reels/Dc8TmxFyq4x/",
+   "PAM": 0.0,
+   "PPL1": 0.938,
+   "approach_hz": 18.75,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_06.npz",
+   "author": "pororo_official.ig",
+   "url": "https://www.instagram.com/reels/Dc5QvqjTYjr/",
+   "PAM": 0.0,
+   "PPL1": 0.688,
+   "approach_hz": 28.5,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_07.npz",
+   "author": "baekdu1010",
+   "url": "https://www.instagram.com/reels/DcyNZvoNAE3/",
+   "PAM": 0.0,
+   "PPL1": 0.938,
+   "approach_hz": 28.25,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_08.npz",
+   "author": "ahsagong0",
+   "url": "https://www.instagram.com/reels/DcQmcU0p2w3/",
+   "PAM": 0.0,
+   "PPL1": 0.438,
+   "approach_hz": 17.25,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_09.npz",
+   "author": "banggom_val",
+   "url": "https://www.instagram.com/reels/DcsqZ9ygweN/",
+   "PAM": 0.0,
+   "PPL1": 0.062,
+   "approach_hz": 8.5,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_10.npz",
+   "author": null,
+   "url": "https://www.instagram.com/reels/DaxdsC8yqQl/",
+   "PAM": 0.0,
+   "PPL1": 0.0,
+   "approach_hz": 11.25,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_11.npz",
+   "author": "juno_hongji",
+   "url": "https://www.instagram.com/reels/Dc3ksazh8Pp/",
+   "PAM": 0.003,
+   "PPL1": 0.688,
+   "approach_hz": 21.5,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_12.npz",
+   "author": "__haru__cat",
+   "url": "https://www.instagram.com/reels/DbQmsmMsH7e/",
+   "PAM": 0.0,
+   "PPL1": 1.312,
+   "approach_hz": 26.0,
+   "GF_peak": 70.0
+  },
+  {
+   "clip": "clip_13.npz",
+   "author": "kend__v",
+   "url": "https://www.instagram.com/reels/DcBc_4dTA2s/",
+   "PAM": 0.007,
+   "PPL1": 1.312,
+   "approach_hz": 26.75,
+   "GF_peak": 30.0
+  },
+  {
+   "clip": "clip_14.npz",
+   "author": "sori.__.i",
+   "url": "https://www.instagram.com/reels/DaWjAhDz9Ik/",
+   "PAM": 0.0,
+   "PPL1": 1.062,
+   "approach_hz": 24.5,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_15.npz",
+   "author": "take_bybd",
+   "url": "https://www.instagram.com/reels/Dc7P84wsoie/",
+   "PAM": 0.0,
+   "PPL1": 0.438,
+   "approach_hz": 24.25,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_16.npz",
+   "author": "noeeuly",
+   "url": "https://www.instagram.com/reels/DaZeP4pIe0L/",
+   "PAM": 0.0,
+   "PPL1": 0.688,
+   "approach_hz": 22.25,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_17.npz",
+   "author": "playeat_food",
+   "url": "https://www.instagram.com/reels/Dc2X0KdDdiE/",
+   "PAM": 0.0,
+   "PPL1": 0.938,
+   "approach_hz": 27.5,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_18.npz",
+   "author": "alpha_hongdae",
+   "url": "https://www.instagram.com/reels/Dar-rp1Px_l/",
+   "PAM": 0.0,
+   "PPL1": 0.625,
+   "approach_hz": 28.5,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_19.npz",
+   "author": "lsj_streetstyle",
+   "url": "https://www.instagram.com/reels/DaiB6uoTrQ1/",
+   "PAM": 0.0,
+   "PPL1": 1.062,
+   "approach_hz": 22.75,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_20.npz",
+   "author": "insa_caulking",
+   "url": "https://www.instagram.com/reels/DcvEN4zs9CR/",
+   "PAM": 0.0,
+   "PPL1": 1.188,
+   "approach_hz": 26.0,
+   "GF_peak": 60.0
+  },
+  {
+   "clip": "clip_21.npz",
+   "author": "bebemomoluv",
+   "url": "https://www.instagram.com/reels/DanSnxMyLaA/",
+   "PAM": 0.0,
+   "PPL1": 1.062,
+   "approach_hz": 23.0,
+   "GF_peak": 90.0
+  },
+  {
+   "clip": "clip_22.npz",
+   "author": "ok_tuk_2",
+   "url": "https://www.instagram.com/reels/Dc6IT1_qxOq/",
+   "PAM": 0.01,
+   "PPL1": 1.25,
+   "approach_hz": 26.0,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_23.npz",
+   "author": "pororo_official.ig",
+   "url": "https://www.instagram.com/reels/DZPQ6pTTmew/",
+   "PAM": 0.003,
+   "PPL1": 1.0,
+   "approach_hz": 25.5,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_24.npz",
+   "author": "sooprano.__",
+   "url": "https://www.instagram.com/reels/DbPOKl9Ac-3/",
+   "PAM": 0.0,
+   "PPL1": 1.125,
+   "approach_hz": 24.75,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_25.npz",
+   "author": "gsd_triss",
+   "url": "https://www.instagram.com/reels/DcXmUgMSCGW/",
+   "PAM": 0.0,
+   "PPL1": 1.0,
+   "approach_hz": 25.5,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_26.npz",
+   "author": "nyamnyam_review",
+   "url": "https://www.instagram.com/reels/DcxwlrHDRDT/",
+   "PAM": 0.0,
+   "PPL1": 1.062,
+   "approach_hz": 26.5,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_27.npz",
+   "author": "jssyussyu",
+   "url": "https://www.instagram.com/reels/DcLwYp_ycjn/",
+   "PAM": 0.0,
+   "PPL1": 0.812,
+   "approach_hz": 27.0,
+   "GF_peak": 130.0
+  },
+  {
+   "clip": "clip_28.npz",
+   "author": "hongsn0w",
+   "url": "https://www.instagram.com/reels/DauxBENp9Yc/",
+   "PAM": 0.0,
+   "PPL1": 0.625,
+   "approach_hz": 26.0,
+   "GF_peak": 0.0
+  },
+  {
+   "clip": "clip_29.npz",
+   "author": "_seorozz",
+   "url": "https://www.instagram.com/reels/Dc_G-jJyt3I/",
+   "PAM": 0.007,
+   "PPL1": 1.812,
+   "approach_hz": 27.25,
+   "GF_peak": 0.0
+  }
+ ],
+ "threshold": {
+  "PAM": 0.0099,
+  "approach_like": 26.0,
+  "PPL1_like_max": 1.062,
+  "PPL1_avoid": 1.312,
+  "GF_peak50ms_hz": 60.0
+ },
+ "sanity": {
+  "loom": {
+   "PAM": 0.0,
+   "PPL1": 1.062,
+   "GF_peak": 190.0,
+   "P9": 0.0,
+   "oDN1": 34.0,
+   "MDN": 0.0,
+   "active_non_input": 3353,
+   "wall_s": 1.84,
+   "path": {
+    "L1": "0/1590",
+    "L2": "0/1696",
+    "Mi1": "0/1582",
+    "T4": "0/6244",
+    "T5": "0/6002",
+    "LC4": "104/104",
+    "LPLC2": "210/210",
+    "KC": "150/5177"
+   },
+   "vpn_hz": {
+    "LC4": 15.0,
+    "LC6": 15.0,
+    "LC16": 15.0,
+    "LPLC2": 15.0,
+    "LC11": 44.68,
+    "LC10": 44.68,
+    "HS": 0.78,
+    "VS": 0.51,
+    "MB_VPN": 72.14
+   },
+   "approach_hz": 17.0
+  },
+  "bars": {
+   "PAM": 0.0,
+   "PPL1": 0.0,
+   "GF_peak": 0.0,
+   "P9": 0.0,
+   "oDN1": 21.0,
+   "MDN": 0.0,
+   "active_non_input": 731,
+   "wall_s": 1.77,
+   "path": {
+    "L1": "0/1590",
+    "L2": "0/1696",
+    "Mi1": "0/1582",
+    "T4": "0/6244",
+    "T5": "0/6002",
+    "LC4": "0/104",
+    "LPLC2": "0/210",
+    "KC": "131/5177"
+   },
+   "vpn_hz": {
+    "LC4": 0.0,
+    "LC6": 0.0,
+    "LC16": 0.0,
+    "LPLC2": 0.0,
+    "LC11": 0.0,
+    "LC10": 0.0,
+    "HS": 53.69,
+    "VS": 1.79,
+    "MB_VPN": 60.18
+   },
+   "approach_hz": 10.5
+  },
+  "vbars": {
+   "PAM": 0.0,
+   "PPL1": 0.0,
+   "GF_peak": 0.0,
+   "P9": 0.0,
+   "oDN1": 22.5,
+   "MDN": 0.0,
+   "active_non_input": 767,
+   "wall_s": 1.78,
+   "path": {
+    "L1": "0/1590",
+    "L2": "0/1696",
+    "Mi1": "0/1582",
+    "T4": "0/6244",
+    "T5": "0/6002",
+    "LC4": "0/104",
+    "LPLC2": "0/210",
+    "KC": "131/5177"
+   },
+   "vpn_hz": {
+    "LC4": 0.0,
+    "LC6": 0.0,
+    "LC16": 0.0,
+    "LPLC2": 0.0,
+    "LC11": 0.0,
+    "LC10": 0.0,
+    "HS": 0.02,
+    "VS": 129.52,
+    "MB_VPN": 59.36
+   },
+   "approach_hz": 11.25
+  },
+  "dot": {
+   "PAM": 0.0,
+   "PPL1": 0.562,
+   "GF_peak": 0.0,
+   "P9": 0.5,
+   "oDN1": 38.0,
+   "MDN": 0.0,
+   "active_non_input": 2604,
+   "wall_s": 1.86,
+   "path": {
+    "L1": "0/1590",
+    "L2": "0/1696",
+    "Mi1": "0/1582",
+    "T4": "0/6244",
+    "T5": "0/6002",
+    "LC4": "0/104",
+    "LPLC2": "0/210",
+    "KC": "150/5177"
+   },
+   "vpn_hz": {
+    "LC4": 0.0,
+    "LC6": 0.0,
+    "LC16": 0.0,
+    "LPLC2": 0.0,
+    "LC11": 64.33,
+    "LC10": 64.33,
+    "HS": 0.12,
+    "VS": 0.01,
+    "MB_VPN": 73.58
+   },
+   "approach_hz": 19.25
+  },
+  "flicker": {
+   "PAM": 0.0,
+   "PPL1": 0.062,
+   "GF_peak": 0.0,
+   "P9": 0.0,
+   "oDN1": 47.0,
+   "MDN": 0.0,
+   "active_non_input": 2110,
+   "wall_s": 1.86,
+   "path": {
+    "L1": "0/1590",
+    "L2": "0/1696",
+    "Mi1": "0/1582",
+    "T4": "0/6244",
+    "T5": "0/6002",
+    "LC4": "0/104",
+    "LPLC2": "0/210",
+    "KC": "211/5177"
+   },
+   "vpn_hz": {
+    "LC4": 0.0,
+    "LC6": 0.0,
+    "LC16": 0.0,
+    "LPLC2": 0.0,
+    "LC11": 54.36,
+    "LC10": 54.36,
+    "HS": 0.08,
+    "VS": 0.29,
+    "MB_VPN": 102.77
+   },
+   "approach_hz": 23.5
+  }
+ }
+}

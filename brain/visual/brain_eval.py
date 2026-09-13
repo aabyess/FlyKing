@@ -205,8 +205,7 @@ class Brain:
             res["vpn_rate_hz"] = per_group
         sim_s = len(frames) / fps
         res["sim_s"] = round(sim_s, 3)
-        self.neu.v = self.params["v_0"]
-        self.neu.g = 0 * mV
+        res["washout_spikes"] = self.washout()
         t0 = float(self.net.t / second)
         self.state.update(rates=rates, t0=t0)
         n_before = len(self.mon.t)
@@ -234,6 +233,30 @@ class Brain:
             res["visual_path"][name] = {"n": len(ids), "active": s["active"], "mean_hz": s["mean_hz"]}
         res["wall_s"] = round(time.time() - t_wall, 2)
         return res
+
+    def washout(self, rounds=3, step_ms=3.0):
+        """자극 사이 초기화. 막전위만 되돌리면 시냅스 지연(1.8ms) 안에 대기 중인 스파이크가 되먹임 회로를 다시 켠다
+        (2026-09-13 보정 중 발견: 한 릴스에서 켜진 PAM 20Hz·PPL1 110Hz 상태가 다음 릴스들로 이어짐).
+        그래서 입력을 끄고 → 모든 뉴런을 불응 상태로 만든 채 대기 스파이크를 흘려보내고 → 막전위·시냅스 전류를 0으로, 를 반복한다.
+        마지막 라운드에서 발화한 스파이크 수를 돌려준다(0이어야 깨끗함)."""
+        from brian2 import mV, ms
+
+        self.state["rates"] = np.zeros((1, self.pg.N))
+        self.pg.rates_ = 0.0
+        t_rfc = self.params["t_rfc"]
+        self.neu.rfc[self.input_index_set] = t_rfc
+        last = 0
+        for _ in range(rounds):
+            self.neu.v = self.params["v_0"]
+            self.neu.g = 0 * mV
+            self.neu.lastspike = self.net.t
+            n0 = len(self.mon.t)
+            self.net.run(step_ms * ms)
+            last = len(self.mon.t) - n0
+        self.neu.rfc[self.input_index_set] = 0 * ms
+        self.neu.v = self.params["v_0"]
+        self.neu.g = 0 * mV
+        return int(last)
 
     def _group(self, ids, ii, ts, sim_s, per_neuron=True):
         idxs = np.array([self.idx[i] for i in ids if i in self.idx], dtype=np.int64)

@@ -77,6 +77,11 @@ def main():
         log("REFERENCE", json.dumps(row, ensure_ascii=False))
     if not reels:
         raise SystemExit("기준 릴스가 없다 — brain/visual/capture_clips.py로 먼저 모은다")
+    # 초기화 검사: 릴스를 다 돌린 뒤 회색 화면을 다시 넣어 대조군과 같은지 본다(되먹임 상태가 남으면 여기서 드러남)
+    post = [brain.run(gray, a.fps, seed=2000 + s) for s in range(3)]
+    post_control = {"PAM": [p["dopamine"]["PAM"]["mean_hz"] for p in post], "PPL1": [p["dopamine"]["PPL1"]["mean_hz"] for p in post],
+                    "approach_hz": [approach_hz(p) for p in post], "washout_spikes": [p["washout_spikes"] for p in post]}
+    log("POST_CONTROL", json.dumps(post_control))
     appr = np.array([x["approach_hz"] for x in reels])
     ppl1 = np.array([x["PPL1"] for x in reels])
     ctrl_appr_thr = control["approach_hz"]["mean"] + K * control["approach_hz"]["sd_used"]
@@ -101,7 +106,7 @@ def main():
                   "vpn_groups": {k: {"n": brain.vpn_counts[k], "weights": v["weights"], "source": v["source"]} for k, v in VPN_INPUT.items()}},
         "stimulus": {"seconds": a.seconds, "fps": a.fps},
         "n_neurons": {name: len(brain.dan[name]["ids"]) for name in ("PAM", "PPL1")},
-        "control": control, "reference_reels": reels, "threshold": threshold, "sanity": sanity,
+        "control": control, "post_control": post_control, "reference_reels": reels, "threshold": threshold, "sanity": sanity,
     }
     (HERE / "calibration.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
     log("CALIBRATION_WROTE", json.dumps(threshold))
