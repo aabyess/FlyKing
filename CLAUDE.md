@@ -18,7 +18,7 @@
 |---|---|
 | `body/` | Blender 초파리 몸 **헤드리스 정본 스크립트**(blender 세션 제작). `gen_fly.py`(메인) · `fly_mesh/fly_body/fly_limbs/fly_wing/fly_tex.py` · `fly_rig.py` · `fly_nmf.py`(flygym MJCF 관절 축·한계) · `apply_joint_angles.py` · `render_fly.py` · `check_baked.py` · `nmf/`(규격 추출·예제 생성·애니 검사) · `examples/`(flygym 관절각 csv/npz, 날갯짓 CPG csv) · `초파리.blend/.fbx` · `Textures/` |
 | `brain/shiu/` | Shiu 모델 실행 스크립트: `smoke_test.py`(0.1초 동작 확인) · `sugar_test.py`(당 뉴런 23개 150Hz 1초 → 상위 반응) · `analyze_sugar.py`(자극 뉴런 뺀 하류 반응) |
-| `scene/` | 「초파리가 폰으로 릴스 보는」 장면(이 세션 제작, body/는 읽기만). `phone.py`(일반형 스마트폰 — 화면은 별도 오브젝트·재질 「폰_화면」, UV 0~1 = 표시 영역, `fit_cover`로 9:16 가운데 맞춤) · `gen_scene.py`(초파리 어펜드 + 폰·거치대·책상·카메라 3대 → `초파리_릴스.blend`, 유니티용 `스마트폰.fbx`, 미리보기 `renders/`) |
+| `scene/` | 「초파리가 폰으로 릴스 보는」 장면(이 세션 제작, body/는 읽기만). `phone.py`(일반형 스마트폰 — 화면은 별도 오브젝트·재질 「폰_화면」, UV 0~1 = 표시 영역, `fit_cover`로 9:16 가운데 맞춤) · `gen_scene.py`(초파리 어펜드 + 폰·거치대·책상·카메라 3대 → `초파리_릴스.blend`, 유니티용 `스마트폰.fbx`(실제 치수), 미리보기 `renders/`). **보기용 크기**(사장님 요청): 초파리 ×10(몸길이 25mm), 폰 높이 = 초파리 몸길이(`FLY_SCALE`·`PHONE_TO_FLY`). 카메라는 `frame()`이 자동으로 맞춰 잡는다 |
 | `insta/` | 초파리 전용 인스타 계정 브라우저 자동화(Playwright). `reels.py`(릴스 읽기·재생속도·넘기기·좋아요, 화면 좌표로 버튼 찾음) · `common.py`(프로필·실행 설정) · `login.py`(창 띄우고 사장님이 **직접** 로그인할 때까지 대기) · `probe_reels.py`(릴스 화면 구조 탐색, 좋아요 안 누름) |
 
 - 뼈대: 뼈 61개, 이름이 NeuroMechFly v2 body 이름과 같다 — `Thorax, Head, LAntenna, RAntenna, LWing, RWing, LHaltere, RHaltere, A1A2, A3~A6` + 다리 `LF/LM/LH/RF/RM/RH` × `Coxa, Femur, Tibia, Tarsus1~5`. 축 +X 앞·+Y 왼·Z 위, 1 단위 = 1mm.
