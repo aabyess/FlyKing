@@ -170,7 +170,13 @@ class Server:
     def enqueue(self, writer, job):
         job["queued_at"] = time.time()
         self.pending[job["key"]] = writer
-        (self.low if job.get("aptitude") else self.high).append(job)
+        if job.get("aptitude"):
+            self.low.append(job)
+        elif job.get("station") == "guard" and (job.get("params") or {}).get("event") == "intruder":
+            job["urgent"] = True
+            self.high.appendleft(job)   # 침입자는 4초 안에 판단이 나와야 막는다 — 대기열 맨 앞(실측: 뒤에 서면 막음 1 · 놓침 4)
+        else:
+            self.high.append(job)
         self.dispatch()
 
     def dispatch(self):
@@ -180,8 +186,11 @@ class Server:
             if not self.high and not self.low:
                 return
             # 게임 판단과 적성 검사를 번갈아 넘긴다 — 한쪽만 계속 밀려 굶지 않게(적성 검사가 끝나야 분류대가 일한다)
-            self.turn = not getattr(self, "turn", False)
-            job = self.low.popleft() if self.low and (self.turn or not self.high) else self.high.popleft()
+            if self.high and self.high[0].get("urgent"):
+                job = self.high.popleft()
+            else:
+                self.turn = not getattr(self, "turn", False)
+                job = self.low.popleft() if self.low and (self.turn or not self.high) else self.high.popleft()
             self.busy[wid] = True
             self.worker_q[wid].put(job)
 

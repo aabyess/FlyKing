@@ -49,21 +49,26 @@ public static class FactoryBuild
     }
 }
 
-/// <summary>FBX 가져오기 규칙: 원래 숫자 그대로(단위 변환 없음). 초파리는 레거시 애니메이션(Walk_Tripod·Idle_Groom).</summary>
+/// <summary>FBX 가져오기 규칙: 파일 단위 무시, 설비는 ×0.01. 초파리는 레거시 애니메이션(Walk_Tripod·Idle_Groom).</summary>
 public class FlyFactoryModelImport : AssetPostprocessor
 {
+    public override uint GetVersion() => 3;   // 규칙이 바뀌면 올려서 FBX를 다시 가져오게 한다
+
     void OnPreprocessModel()
     {
         var mi = (ModelImporter)assetImporter;
         mi.useFileScale = false;
-        mi.globalScale = 1f;
         if (assetPath.Contains("초파리"))
         {
+            mi.globalScale = 1f;   // 크기는 실행 중 FactoryGame.FitWidth가 규격(×10 초파리 약 42.6)에 맞춘다
+            mi.isReadable = true;   // 실행 중 꼭짓점으로 크기를 잰다(FactoryGame.MeshWidth)
             mi.animationType = ModelImporterAnimationType.Legacy;
             mi.importAnimation = true;
         }
         else
         {
+            // 2026-09-13 실측: Blender 설비 FBX가 파일 단위 무시 시 100배로 들어옴(분류대 24,340 → 규격 243.4)
+            mi.globalScale = 0.01f;
             mi.animationType = ModelImporterAnimationType.None;
             mi.importAnimation = false;
         }
