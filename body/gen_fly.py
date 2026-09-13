@@ -174,6 +174,8 @@ def main():
     assert rig_info["nmf"]["fit_max_deg"] < 1.0 and rig_info["nmf"]["wing_solve_max"] < 1e-3, f"NMF 맞춤 잔차: {rig_info['nmf']}"
     actions = sorted(a.name for a in bpy.data.actions)
     assert actions == ["Flight_Wingbeat", "Idle_Groom", "Walk_Tripod"], f"액션이 셋이 아니다: {actions}"
+    for act in bpy.data.actions:
+        act.use_fake_user = True    # 🔴 사용자 0인 액션은 .blend 저장 때 빠진다 — 11:14판 .blend엔 활성 Walk_Tripod 하나만 남았다(FBX엔 셋)
     for o in bpy.context.view_layer.objects:
         o.select_set(o in (obj, arm))
     bpy.context.view_layer.objects.active = arm

@@ -16,6 +16,9 @@
   --ground clip|frame|none  발끝 접지 보정. NMF 다리는 우리보다 몸높이 대비 짧아 각을 그대로 옮기면 발이 땅 아래로 간다(실측 0.1~0.4mm).
             clip = 클립 전체 최저 발끝을 쉬는 자세 발끝 높이로 한 번 올림(기본), frame = 프레임마다, none = 안 함
   --wing-display-hz H  합성 날갯짓이 화면에서 초당 H박동을 넘으면 위상만 늦춘다(기본 fps/4 — 앨리어싱 방지). 진폭·비대칭은 데이터 그대로
+  --pose ground|flight  ground = 서 있는 몸(기본). flight = fly_rig.flight_pose — 다리 접고 몸 머리 40° 들고 1.2mm 띄운 정지비행 몸(날갯짓만 있는 데이터용,
+            다리 관절각 열과는 같이 못 씀). 🔴 서 있는 몸에 큰 폭(150°+) 날갯짓을 주면 앞이 30° 내려간 스트로크 면 때문에 날개 끝이 바닥을 뚫는다
+            (wingbeat_cpg 실측 z −0.34mm) — Flight_Wingbeat 클립과 같은 까닭
   --name 액션이름  --save 결과.blend  --fbx 결과.fbx
 원리는 fly_nmf.py 머리말(순운동학 → θ_ref로 우리 쉬는 자세에 맞춤)."""
 import argparse
@@ -73,6 +76,7 @@ def main():
     ap.add_argument("--degrees", action="store_true")
     ap.add_argument("--ground", choices=("clip", "frame", "none"), default="clip")
     ap.add_argument("--wing-display-hz", type=float)
+    ap.add_argument("--pose", choices=("ground", "flight"), default="ground")
     ap.add_argument("--name")
     ap.add_argument("--save")
     ap.add_argument("--fbx")
@@ -89,7 +93,7 @@ def main():
         raise SystemExit("관절 열도 날갯짓 열도 없다")
     version = version or "v2"
     order = tuple(args.axis_order.split("_")) if args.axis_order else None
-    if version == "v2" and not order:
+    if version == "v2" and not order and found:                    # 날갯짓 발생기 열만 있으면 축 순서는 쓰이지 않는다
         print("⚠️ v2 데이터인데 --axis-order가 없다 — yaw_pitch_roll로 가정(데이터를 만든 skeleton.axis_order와 맞출 것)")
 
     arm = next(o for o in bpy.data.objects if o.type == "ARMATURE" and o.name.startswith("초파리"))
@@ -112,6 +116,8 @@ def main():
             wing_cols = {}
         else:
             driven |= {"LWing", "RWing"}
+    if args.pose == "flight" and any(b[:2] in fb.LEGS for b in driven):
+        raise SystemExit("--pose flight는 다리를 접은 자세로 덮어쓴다 — 다리 관절각 열과 같이 못 쓴다")
     cap = args.wing_display_hz or args.fps / 4.0
     phase, warm, slowed, desired_all = 0.0, {"L": [0.0, 0.0, 0.0], "R": [0.0, 0.0, 0.0]}, False, []
     for j in range(frames + 1):
@@ -127,7 +133,7 @@ def main():
                 span, lead = fly_wing.wing_frame(side, phase, fly_wing.side_params(p, side))
                 a, warm[side], _ = fly_wing.solve_angles(nmf, side, span, lead, warm[side], driver.order)
                 angles.update(a)
-        desired_all.append(driver.desired(angles, driven))
+        desired_all.append(fly_rig.flight_pose(poser, driver, angles) if args.pose == "flight" else driver.desired(angles, driven))
 
     rest_tip = min(arm.data.bones[leg + "Tarsus5"].tail_local.z for leg in fb.LEGS)
 
@@ -159,7 +165,7 @@ def main():
     scene.render.fps = int(round(args.fps))
     scene.frame_start, scene.frame_end = 0, frames
     print(f"적용  {name}  버전 {version}  축 순서 {driver.order or 'MJCF/기본'}  열 {len(found)}개 → 뼈 {len(driven)}개  "
-          f"프레임 0~{frames} ({args.fps:g}fps, 시간 ×{args.slow:g})  θ_ref 잔차 최대 {max(driver.fit_deg.values()):.2f}°  "
+          f"자세 {args.pose}  프레임 0~{frames} ({args.fps:g}fps, 시간 ×{args.slow:g})  θ_ref 잔차 최대 {max(driver.fit_deg.values()):.2f}°  "
           f"접지 보정 {args.ground} {min(offsets):+.3f}~{max(offsets):+.3f}mm")
     if skipped:
         print("  못 옮긴 열:", skipped)
