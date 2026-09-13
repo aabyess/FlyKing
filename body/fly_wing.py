@@ -3,14 +3,18 @@
 매개변수(기본값):
   freq 200Hz · amplitude 150°(스트로크 앞뒤 폭) — PM 지시값
   deviation ±10°(박동당 두 번 → 끝이 8자), rotation ±45°(스트로크 중간 받음각, 반전에서 뒤집힘), stroke_plane 30°(스트로크 면 앞쪽이 몸 긴축보다 아래),
-  stroke_bias 0°(스트로크 가운데 위치) — 초파리 자유비행 운동학에서 흔히 보고되는 규모의 대략값(예: Fry, Sayaman & Dickinson 2003).
+  stroke_bias −16°(스트로크를 뒤로 — 경첩 옆 가슴 벽 회피, 2026-09-13 실측. 원래 0°) — 초파리 자유비행 운동학에서 흔히 보고되는 규모의 대략값(예: Fry, Sayaman & Dickinson 2003).
   flygym 파일에서 온 값이 아니므로 조절용 매개변수로 둔다.
 날개 판 기준(φ=θ=α=0): 끝(span) = 옆(+Y 왼), 앞 가장자리 = +X, 등 = +Z. 오른쪽은 XZ 면 거울상(S·R·S)."""
 import math
 
 from mathutils import Matrix, Vector
 
-DEFAULTS = dict(freq=200.0, amplitude=150.0, deviation=10.0, rotation=45.0, stroke_plane=30.0, stroke_bias=0.0, asym=0.0)
+DEFAULTS = dict(freq=200.0, amplitude=150.0, deviation=10.0, rotation=45.0, stroke_plane=30.0, stroke_bias=-16.0, asym=0.0)
+# 🔴 한쪽 날개 폭 상한(2026-09-13 실측, 경첩 y 0.52·bias −16°, 위상 24칸): 폭 150°·비대칭 0이면 경첩 0.25mm 밖 날개 정점이 몸(가슴·머리·배) 안에 0.
+#   한쪽 폭이 더 크면 날개 뿌리 쪽이 가슴 벽을 조금 스친다 — 비대칭 0.1(157.5°) 1점 · 0.2(165°) 3점 · 0.3(172.5°) 4점 · 폭 165° 6점, 0.5mm 밖은 모두 0.
+#   경첩 0.25mm 안은 경첩 구역(실제로도 관절로 이어진 부위)이라 검사에서 뺀다(PM 기준). apply_joint_angles가 넘으면 경고만 한다(데이터는 그대로).
+SAFE_AMPLITUDE = 150.0
 
 
 def _sign_smooth(s, k=3.0):

@@ -6,15 +6,21 @@ from mathutils import Vector
 from fly_body import CREAM, DARK, LEG, M_HAIR, M_LEG, M_WING, X, Y, Z, mix, smooth
 from fly_mesh import bristle, ellipsoid, tube
 
-# 왼쪽 기준(오른쪽은 y·방위각 부호만 뒤집는다). 길이 mm — 암컷 성체 문헌값 근사.
+# 왼쪽 기준(오른쪽은 y·방위각 부호만 뒤집는다). 길이 mm — 🔴 2026-09-13 NeuroMechFly v2 rigging.yaml 마디 길이로 맞춤(PM 결정):
+#   문헌 근사값(전체 0.77배)은 flygym 걷기 관절각을 넣으면 뒷다리가 배를 뚫었다(최대 0.70mm). Femur 뼈 = tro + femur = NMF trochanterfemur→tibia.
+#   Tarsus5(마지막 0.08)는 NMF에 길이가 없어 그대로. 옛 값: F coxa .30 femur .53 tibia .45 tarsi .14/.07/.05/.05 · M .18/.55/.50 · .20/.09/.06/.05 · H .20/.60/.55 · .22/.10/.07/.05
 LEG_CFG = {
-    "F": dict(base=(0.58, 0.13, 0.42), coxa_dir=(0.5, 0.2, -0.85), coxa=0.30, tro=0.08, femur=0.53, tibia=0.45,
-              tarsi=(0.14, 0.07, 0.05, 0.05, 0.08), phi=30, elev=35, ankle=0.12, r=(0.062, 0.047, 0.031, 0.021)),
-    "M": dict(base=(0.30, 0.20, 0.40), coxa_dir=(0.05, 0.45, -0.9), coxa=0.18, tro=0.08, femur=0.55, tibia=0.50,
-              tarsi=(0.20, 0.09, 0.06, 0.05, 0.08), phi=85, elev=35, ankle=0.14, r=(0.042, 0.042, 0.028, 0.019)),
-    "H": dict(base=(0.08, 0.20, 0.42), coxa_dir=(-0.2, 0.4, -0.9), coxa=0.20, tro=0.08, femur=0.60, tibia=0.55,
-              tarsi=(0.22, 0.10, 0.07, 0.05, 0.08), phi=150, elev=40, ankle=0.15, r=(0.045, 0.045, 0.03, 0.02)),
+    "F": dict(base=(0.58, 0.13, 0.42), coxa_dir=(0.5, 0.2, -0.85), coxa=0.365, tro=0.08, femur=0.625, tibia=0.518,
+              tarsi=(0.225, 0.154, 0.099, 0.087, 0.08), phi=30, elev=35, ankle=0.12, r=(0.062, 0.047, 0.031, 0.021)),
+    "M": dict(base=(0.30, 0.20, 0.40), coxa_dir=(0.05, 0.45, -0.9), coxa=0.181, tro=0.08, femur=0.704, tibia=0.667,
+              tarsi=(0.292, 0.160, 0.091, 0.064, 0.08), phi=85, elev=35, ankle=0.14, r=(0.042, 0.042, 0.028, 0.019)),
+    "H": dict(base=(0.08, 0.20, 0.42), coxa_dir=(-0.2, 0.4, -0.9), coxa=0.199, tro=0.08, femur=0.756, tibia=0.684,
+              tarsi=(0.353, 0.175, 0.097, 0.073, 0.08), phi=150, elev=40, ankle=0.15, r=(0.045, 0.045, 0.03, 0.02)),
 }
+# 🔴 뒷다리 밑마디 붙는 자리(PM 허용 2026-09-13): NMF 길이만으로는 flygym 걷기에서 뒷다리 넓적다리가 여전히 배를 지났다(13프레임).
+#   NMF는 앞다리 밑마디 기준 뒷다리 밑마디가 0.27mm 낮다 — 붙는 자리를 내린다(안쪽 이동은 시험에서 오히려 나빠짐). 값은 시험 결과로 채운다.
+HIND_BASE_SHIFT = (0.0, 0.0, -0.16)   # (x 앞, y 바깥, z 위) mm — 시험: 아래 −0.12 → 3프레임, −0.16·−0.20 → 0(가장 작은 −0.16). 안쪽 −0.07·뒤 −0.12는 나빠지거나 이득 없음
+COXA_ROOT = {"F": 0.0, "M": 0.0, "H": 0.2}   # 밑마디 메시를 가슴 쪽으로 늘이는 길이 mm — 붙는 자리가 표면 아래로 내려가도 몸에 붙어 보이게(뼈 머리는 그대로)
 # 🔴 1차 반지름(넓적다리 0.062 등)은 소시지 같은 굵은 다리였다 — 몸폭 0.96 대비 넓적다리 지름 약 0.1로 줄임
 
 
@@ -23,6 +29,8 @@ def leg_joints(side, key):
     cfg = LEG_CFG[key]
     s = 1.0 if side == "L" else -1.0
     base = Vector((cfg["base"][0], cfg["base"][1] * s, cfg["base"][2]))
+    if key == "H":
+        base += Vector((HIND_BASE_SHIFT[0], HIND_BASE_SHIFT[1] * s, HIND_BASE_SHIFT[2]))
     cd = Vector((cfg["coxa_dir"][0], cfg["coxa_dir"][1] * s, cfg["coxa_dir"][2])).normalized()
     ctr = base + cd * cfg["coxa"]
     phi, elev = math.radians(cfg["phi"]) * s, math.radians(cfg["elev"])
@@ -67,7 +75,8 @@ def build_leg(mesh, side, key):
     # 🔴 3차(가운데 1.05rc로 부푼 통)는 옆에서 앞다리 밑마디가 풍선처럼 먼저 보였다(PM) — 약 25% 가늘게, 가슴 쪽이 좁은 원뿔형
     coxa_w = lambda t: rc * 0.8 * (0.62 + 0.38 * t + 0.15 * math.sin(math.pi * t))
     coxa_r = lambda t: (coxa_w(t), coxa_w(t) * 0.9, coxa_w(t) * 0.9)
-    tube(mesh, j["base"], j["ctr"], coxa_r, M_LEG, name + "Coxa", LEG, 14, 9)
+    root = j["base"] - (j["ctr"] - j["base"]).normalized() * COXA_ROOT[key]
+    tube(mesh, root, j["ctr"], coxa_r, M_LEG, name + "Coxa", LEG, 14, 9)
     tube(mesh, j["ctr"] - (j["tro"] - j["ctr"]) * 0.2, j["tro"], lambda t: (rf * 0.7,) * 3, M_LEG, name + "Femur", LEG, 12, 6)
     femur_r = lambda t: (rf * (0.72 + 0.35 * math.sin(math.pi * min(1.0, t * 1.25))), rf * (0.7 + 0.3 * math.sin(math.pi * t)),
                          rf * (0.7 + 0.3 * math.sin(math.pi * t)))
@@ -151,7 +160,9 @@ def _edge_w(line, s):
 
 def wing_frame(side, pose):
     s = 1.0 if side == "L" else -1.0
-    hinge = Vector((0.12, 0.37 * s, 1.01))
+    # 🔴 2026-09-13 경첩 y 0.37 → 0.52(PM 허용): 기본 날갯짓 앞끝에서 날개 뿌리가 가슴 벽 속을 지났다(경첩 0.25mm 밖 48점).
+    #   바깥 +0.15mm + fly_wing stroke_bias −16°에서 0(가슴 표면과 0.079mm, 렌더로 붙어 보임 확인). 위로 옮기면 오히려 나빠짐.
+    hinge = Vector((0.12, 0.52 * s, 1.01))
     psi = math.radians(-12.0 if pose == "rest" else 80.0)
     u = Vector((-math.cos(psi), math.sin(psi) * s, 0.0))
     v = Vector((math.sin(psi), math.cos(psi) * s, 0.0))

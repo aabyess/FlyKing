@@ -120,10 +120,12 @@ def main():
         raise SystemExit("--pose flight는 다리를 접은 자세로 덮어쓴다 — 다리 관절각 열과 같이 못 쓴다")
     cap = args.wing_display_hz or args.fps / 4.0
     phase, warm, slowed, desired_all = 0.0, {"L": [0.0, 0.0, 0.0], "R": [0.0, 0.0, 0.0]}, False, []
+    side_amp_max = 0.0
     for j in range(frames + 1):
         angles = {found[n]: float(interp[n][j]) * scale for n in found}
         if wing_cols:
             p = dict(fly_wing.DEFAULTS, **{WING_COLS[k]: float(interp[k][j]) for k in wing_cols})
+            side_amp_max = max(side_amp_max, p["amplitude"] * (1.0 + 0.5 * abs(p.get("asym", 0.0))))
             if j:
                 hz = p["freq"] / args.slow
                 if hz > cap:
@@ -170,6 +172,8 @@ def main():
     if skipped:
         print("  못 옮긴 열:", skipped)
     if wing_cols:
+        if side_amp_max > fly_wing.SAFE_AMPLITUDE:
+            print(f"  ⚠️ 한쪽 날개 폭 최대 {side_amp_max:.1f}° > 안전 상한 {fly_wing.SAFE_AMPLITUDE:g}° — 날개 뿌리가 가슴 벽을 조금 스칠 수 있다(fly_wing.SAFE_AMPLITUDE 주석)")
         print(f"  날갯짓 합성 열 {sorted(wing_cols)}" + (f"  ⚠️ 화면 박동수를 {cap:g}Hz로 늦춤(앨리어싱 방지)" if slowed else ""))
     if args.save:
         bpy.ops.wm.save_as_mainfile(filepath=str(Path(args.save).resolve()), relative_remap=True)

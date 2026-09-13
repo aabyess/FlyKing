@@ -32,6 +32,9 @@ part = [vg[p[0]] for p in polys]
 wing_idx = [i for i, g in vg.items() if g and g.endswith("Wing")][::3]
 
 
+# 판정 기준(PM 2026-09-13): 날개 경첩(날개 뼈 머리)에서 0.25mm 안은 「경첩 구역」 — 실제 초파리도 관절로 이어진 부위라 검사에서 뺀다.
+#   그 밖 날개 정점은 몸(가슴·머리·배) 안에 0이어야 한다. 기본 날갯짓(폭 150°·비대칭 0, 경첩 y 0.52·bias −16°)에서 0.
+#   한쪽 폭이 fly_wing.SAFE_AMPLITUDE(150°)를 넘으면 뿌리 쪽 몇 점이 남는다(주석 참고) — apply_joint_angles가 경고.
 def inside(bvh, p):
     first = None
     for direction in (Vector((0.0, 0.0, 1.0)), Vector((1.0, 0.0, 0.0))):

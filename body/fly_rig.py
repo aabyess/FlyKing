@@ -26,8 +26,11 @@ FLIGHT_PITCH, FLIGHT_LIFT = 40.0, 1.2   # 날 때 몸 머리 들기(°)·띄우�
 FLIGHT_LEGS = {"F": ((1.00, 0.16, 0.20), (1.0, -0.1, -0.6), (-0.3, 0.9, 0.3)),
                "M": ((-0.60, 0.45, 0.15), (-1.0, 0.1, -0.3), (0.0, 0.3, 1.0)),
                "H": ((-1.30, 0.28, 0.25), (-1.0, -0.05, -0.2), (0.0, 0.2, 1.0))}
+# 🔴 NMF 길이 다리(2026-09-13)는 위 목표로 접으면 41프레임 내내 몸을 뚫었다 — 목표를 밑마디 기준 1.3배로 벌리고 뒷다리만 0.2mm 더 바깥(시험: 뚫는 마디 12 → 0)
+FLIGHT_TUCK_SCALE, FLIGHT_HIND_OUT = 1.3, 0.2
 Z = Vector((0.0, 0.0, 1.0))
 TRIPOD_A = ("LF", "RM", "LH")
+GROOM_ARC = 0.06                  # mm — 털고르기 앞다리가 오갈 때 드는 호 높이(0.06·0.10·0.15 시험, 가장 작은 0.06으로 최저 −0.036 → −0.006)
 STRIDE, LIFT = 0.6, 0.16          # mm — 한 걸음 앞뒤 폭·발 드는 높이(1차 0.5·0.12는 옆에서 걷는지 안 보였다)
 
 
@@ -178,7 +181,9 @@ def groom_pose(poser, t):
         goal = body @ Vector((1.22 + 0.03 * math.cos(ph), 0.15 * s + 0.05 * s * math.sin(ph), 0.78 + 0.09 * math.sin(ph)))
         tdir = (rest_tip - ankle_r).normalized().lerp(Vector((0.15, -0.35 * s, 1.0)).normalized(), e).normalized()
         pole = Z.lerp(Vector((-0.2, 0.8 * s, 0.6)).normalized(), e).normalized()
-        poser.leg(desired, leg, body, rest_tip.lerp(goal, e), tdir, pole)
+        # 🔴 NMF 길이 다리(앞 종아리 0.518)는 곧은 선으로 돌아오다 종아리 끝 가시가 바닥 아래(−0.036)로 — 오가는 동안만 호로 들어 올린다(e=0·1이면 0)
+        tip = rest_tip.lerp(goal, e) + Z * (GROOM_ARC * math.sin(math.pi * e))
+        poser.leg(desired, leg, body, tip, tdir, pole)
     return desired
 
 
@@ -188,7 +193,11 @@ def flight_pose(poser, driver, wing_angles):
         s = 1.0 if leg[0] == "L" else -1.0
         tip, tdir, pole = FLIGHT_LEGS[leg[1]]
         mirror = lambda v: Vector((v[0], v[1] * s, v[2]))
-        poser.leg(desired, leg, Matrix.Identity(4), mirror(tip), mirror(tdir).normalized(), mirror(pole).normalized())
+        base = poser.head[leg + "Coxa"]
+        goal = base + (mirror(tip) - base) * FLIGHT_TUCK_SCALE
+        if leg[1] == "H":
+            goal.y += FLIGHT_HIND_OUT * s
+        poser.leg(desired, leg, Matrix.Identity(4), goal, mirror(tdir).normalized(), mirror(pole).normalized())
     wings = driver.desired(wing_angles, {"LWing", "RWing"})
     desired["LWing"], desired["RWing"] = wings["LWing"], wings["RWing"]
     # 🔴 1차(몸 수평·바닥에 앉은 채)는 몸 기준으로 앞이 30° 내려간 스트로크 면 때문에 날개 끝이 z −0.24로 바닥을 뚫었다.
