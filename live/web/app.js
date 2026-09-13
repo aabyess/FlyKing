@@ -113,6 +113,10 @@ function drawScreen(now) {
 
   const font = (w, px) => `${w} ${px}px -apple-system, "Apple SD Gothic Neo", sans-serif`;
   sg.fillStyle = '#fff'; sg.font = font(700, 38); sg.fillText('릴스', 30, 84);
+  if (state.drag > 0.9) {
+    sg.fillStyle = 'rgba(255,255,255,.6)'; sg.font = font(500, 28); sg.textAlign = 'center';
+    sg.fillText('다음 릴스', SW / 2, SH / 2); sg.textAlign = 'left';
+  }
 
   // 오른쪽 버튼 줄
   const hx = UI.heart[0] * SW, hy = UI.heart[1] * SH;
@@ -183,7 +187,7 @@ function connect() {
     if (m.type === 'hello') { state.source = m.source; state.fake = m.like !== 'real'; }
     else if (m.type === 'reel') {
       if (!state.reel || state.reel.id !== m.id) {
-        state.slideIn = state.drag > 0 ? 0.32 : 0; state.drag = 0; state.liked = !!m.liked;
+        state.slideIn = state.drag > 0 ? 0.45 : 0; state.drag = 0; state.release = null; state.liked = !!m.liked;
         state.reelStart = performance.now(); state.progress = null;
       }
       state.reel = m; state.seen = m.seen; state.likedTotal = m.likedTotal;
@@ -329,12 +333,17 @@ function stepActions(dt) {
   if (!a) return;
   a.t = state.frozen ? state.frozen.t : a.t + dt;
   const tr = a.track;
-  if (tr.drag) state.drag = 0.32 * smooth(tr.drag[0], tr.drag[1], a.t) * (a.fired && a.t > tr.drag[1] + 0.05 ? 1 : 1);
+  // 끌어올리기는 다리가 화면에 붙어 있는 동안만. 떨어진 뒤(fired)에는 release·새 릴스 도착이 위치를 정한다.
+  // (전에는 동작이 끝날 때까지 매 프레임 0.32로 덮어써서, 새 릴스가 위로 올라간 채 남았다)
+  if (tr.drag && !a.fired && !state.release) state.drag = 0.32 * smooth(tr.drag[0], tr.drag[1], a.t);
   if (!a.fired && a.t >= tr.touchAt) {
     a.fired = true;
     const uv = a.m.action === 'like' ? UI.heart : UI.swipeTo;
     state.ripple = { u: uv[0], v: uv[1], t: performance.now() };
     if (a.m.action === 'like' && !state.fake) state.likePop = 0.001;
+    // 넘기기: 다리가 떨어지는 순간 이전 릴스를 위로 완전히 빼 둔다. 새 릴스 정보가 오면 아래에서 올라와 제자리에 맞춘다.
+    // (전에는 32% 올라간 자리에 머물러, 넘어오는 동안 새 릴스 프레임도 위로 밀려 보였다)
+    if (a.m.action === 'swipe' && !state.frozen) state.release = { t: performance.now(), from: state.drag };
     sendTouch(a.m.action, a.m.id);
   }
   if (a.t >= tr.end && !state.frozen) state.action = null;
@@ -462,7 +471,12 @@ async function start() {
     if (state.phase === 'walk' && state.phaseT >= WALK_S) { state.phase = 'rise'; state.phaseT = 0; }
     if (state.phase === 'rise' && state.phaseT >= RISE_S) { state.phase = 'watch'; state.phaseT = 0; }
     if (state.likePop > 0) state.likePop = Math.min(1.01, state.likePop + dt * 3) >= 1.01 ? 0 : state.likePop + dt * 3;
-    if (state.slideIn > 0) state.slideIn = Math.max(0, state.slideIn - dt * 1.2);
+    if (state.slideIn > 0) state.slideIn = Math.max(0, state.slideIn - dt * 2.2);
+    if (state.release) {
+      const since = now - state.release.t;
+      state.drag = state.release.from + (1 - state.release.from) * smooth(0, 250, since);
+      if (since > 4000) { state.release = null; state.drag = 0; state.slideIn = 0.45; }   // 새 릴스가 안 오면 제자리로
+    }
     stepActions(dt);
     poseFly(now, dt);
     drawScreen(now);
