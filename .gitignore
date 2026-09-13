@@ -14,3 +14,6 @@ results/
 data/
 
 .DS_Store
+
+# 장면 미리보기 렌더
+scene/renders/

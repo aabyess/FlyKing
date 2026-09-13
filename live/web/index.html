@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FlyKing 라이브</title>
+<style>
+  :root { --ink:#e6eaef; --muted:#8e99a4; --line:#2a323b; --panel:rgba(16,20,25,.82); --eye:#e2593f; --ok:#6fcf8e; }
+  html, body { margin:0; height:100%; background:#15171c; color:var(--ink);
+    font:14px/1.5 -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; overflow:hidden; }
+  #stage, #stage canvas { position:fixed; inset:0; width:100%; height:100%; display:block; }
+  .hud { position:fixed; left:16px; top:16px; width:300px; background:var(--panel); border:1px solid var(--line);
+    border-radius:8px; padding:12px 14px; display:grid; gap:8px; backdrop-filter:blur(6px); }
+  .hud h1 { margin:0; font-size:15px; font-weight:600; display:flex; align-items:center; gap:8px; }
+  .dot { width:8px; height:8px; border-radius:50%; background:#666; }
+  .dot.on { background:var(--ok); }
+  .row { display:grid; grid-template-columns:72px 1fr; gap:8px; font-size:12.5px; }
+  .row span:first-child { color:var(--muted); }
+  .row b { font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mono { font-family:ui-monospace, Menlo, monospace; font-variant-numeric:tabular-nums; }
+  .note { font-size:11.5px; color:var(--muted); border-top:1px solid var(--line); padding-top:8px; }
+  .cams { position:fixed; right:16px; top:16px; display:flex; gap:6px; }
+  .cams button { background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:6px;
+    padding:6px 10px; font:inherit; font-size:12.5px; cursor:pointer; }
+  .cams button:focus-visible { outline:2px solid var(--eye); }
+  #loading { position:fixed; inset:0; display:grid; place-items:center; color:var(--muted); }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="stage"></div>
+<div id="loading">초파리 불러오는 중…</div>
+<div class="hud" aria-live="polite">
+  <h1><span class="dot" id="dot"></span>FlyKing 라이브</h1>
+  <div class="row"><span>연결</span><b id="h-conn">허브 기다리는 중</b></div>
+  <div class="row"><span>릴스</span><b id="h-author">—</b></div>
+  <div class="row"><span>본 시간</span><b class="mono" id="h-time">—</b></div>
+  <div class="row"><span>정한 것</span><b id="h-plan">—</b></div>
+  <div class="row"><span>초파리</span><b id="h-act">걸어가는 중</b></div>
+  <div class="row"><span>누적</span><b class="mono" id="h-total">본 릴스 0 · 좋아요 0</b></div>
+  <div class="brain" id="h-brain" hidden>
+    <div class="row"><span>뇌 판정</span><b id="h-verdict">—</b></div>
+    <div class="meter"><span>보상 PAM</span><i><em id="m-reward"></em><u></u></i><b class="mono" id="v-reward">—</b></div>
+    <div class="meter"><span>다가가기</span><i><em id="m-approach"></em><u></u></i><b class="mono" id="v-approach">—</b></div>
+    <div class="meter"><span>처벌 PPL1</span><i><em id="m-punish"></em><u></u></i><b class="mono" id="v-punish">—</b></div>
+    <div class="meter"><span>도주 GF</span><i><em id="m-escape"></em><u></u></i><b class="mono" id="v-escape">—</b></div>
+    <div class="why" id="h-reason"></div>
+  </div>
+  <div class="note" id="h-note">판단 방식을 기다리는 중이에요.</div>
+</div>
+<div class="cams">
+  <button id="cam-wide" type="button">전체 (1)</button>
+  <button id="cam-shoulder" type="button">어깨 너머 (2)</button>
+  <button id="cam-side" type="button">옆 (3)</button>
+</div>
+<script type="module" src="app.js"></script>
+<script type="module" src="brain_hud.js"></script>
+</body>
+</html>
