@@ -57,7 +57,8 @@ def main(n=6, seconds=2.0, fps=10.0):
             return 2
         page.wait_for_selector("video", timeout=30000)
         page.wait_for_timeout(2500)
-        for k in range(n):
+        start = len(list(out.glob("clip_*.npz")))          # 이미 있는 조각은 덮어쓰지 않고 뒤에 붙인다
+        for k in range(start, start + n):
             info = read_reel(page) or {}
             frames, ts = [], []
             t_end = time.monotonic() + seconds

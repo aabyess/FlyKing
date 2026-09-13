@@ -85,30 +85,44 @@ def finite(x, default):
 
 
 def judge(res, calib):
-    """뇌 결과 → 판정. 문턱·값·지수를 모두 담아 돌려준다(기록·뷰어 표시용)."""
+    """뇌 결과 → 판정. 문턱·값·지수를 모두 담아 돌려준다(기록·뷰어 표시용).
+
+    순서(앞이 우선):
+      1. 도주   거대섬유 50ms 최고 ≥ 60Hz (von Reyn 2014; 문턱 embodied brain_body_bridge)          → 바로 넘김
+      2. 처벌   PPL1 평균 ≥ 기준 릴스 90백분위 (Aso 2010·2012)                                         → 바로 넘김
+      3. 보상   PAM 평균 ≥ 회색 대조군 평균+3SD (Liu 2012; Burke 2012)                                 → 좋아요
+      4. 다가가기 oDN1·P9 평균 ≥ 기준 릴스 67백분위, 그리고 PPL1 ≤ 67백분위 (Bidaye 2020)            → 좋아요
+      5. 그 밖                                                                                         → 조금 보고 넘김
+    """
     pam = res["dopamine"]["PAM"]["mean_hz"]
     ppl1 = res["dopamine"]["PPL1"]["mean_hz"]
     gf = res["groups"]["GF"]["peak50ms_hz"]
+    appr = round((res["groups"]["oDN1"]["mean_hz"] + res["groups"]["P9"]["mean_hz"]) / 2, 3)
     thr = (calib or {}).get("threshold", {})
-    t_pam, t_ppl1, t_gf = thr.get("PAM"), thr.get("PPL1"), thr.get("GF_peak50ms_hz", 60.0)
+    t_pam, t_gf = thr.get("PAM"), thr.get("GF_peak50ms_hz", 60.0)
+    t_appr, t_ppl1_like, t_ppl1_avoid = thr.get("approach_like"), thr.get("PPL1_like_max"), thr.get("PPL1_avoid")
+    idx = lambda v, t: round(v / t, 3) if t else None  # noqa: E731
     out = {
-        "values": {"PAM_mean_hz": pam, "PPL1_mean_hz": ppl1, "GF_peak50ms_hz": gf},
-        "thresholds": {"PAM_mean_hz": t_pam, "PPL1_mean_hz": t_ppl1, "GF_peak50ms_hz": t_gf},
+        "values": {"PAM_mean_hz": pam, "approach_hz": appr, "PPL1_mean_hz": ppl1, "GF_peak50ms_hz": gf},
+        "thresholds": {"PAM_mean_hz": t_pam, "approach_hz": t_appr, "PPL1_like_max": t_ppl1_like,
+                       "PPL1_mean_hz": t_ppl1_avoid, "GF_peak50ms_hz": t_gf},
         "threshold_source": (calib or {}).get("method", "보정 파일 없음 — brain/visual/calibrate.py 실행 필요"),
-        "reward_index": round(pam / t_pam, 3) if t_pam else None,
-        "punish_index": round(ppl1 / t_ppl1, 3) if t_ppl1 else None,
-        "escape_index": round(gf / t_gf, 3) if t_gf else None,
+        "reward_index": idx(pam, t_pam), "approach_index": idx(appr, t_appr),
+        "punish_index": idx(ppl1, t_ppl1_avoid), "escape_index": idx(gf, t_gf),
     }
-    if gf >= t_gf:
-        out.update(verdict="avoid", reason=f"거대섬유(도약 도주) 최고 발화 {gf}Hz ≥ 문턱 {t_gf}Hz → 바로 넘김")
-    elif t_ppl1 and ppl1 >= t_ppl1 and (not t_pam or ppl1 / t_ppl1 > pam / t_pam):
-        out.update(verdict="avoid", reason=f"처벌 도파민(PPL1) {ppl1}Hz ≥ 문턱 {t_ppl1}Hz, 보상보다 큼 → 바로 넘김")
+    if not thr:
+        out.update(verdict="neutral", reason="문턱 보정 파일이 없어 판정하지 않음 — brain/visual/calibrate.py 실행 필요")
+    elif gf >= t_gf:
+        out.update(verdict="avoid", reason=f"거대섬유(도약 도주) 최고 발화 {gf}Hz ≥ {t_gf}Hz → 바로 넘김")
+    elif t_ppl1_avoid is not None and ppl1 >= t_ppl1_avoid and ppl1 > 0:
+        out.update(verdict="avoid", reason=f"처벌 도파민 PPL1 {ppl1}Hz ≥ 기준 릴스 상위 10% {t_ppl1_avoid}Hz → 바로 넘김")
     elif t_pam and pam >= t_pam:
-        out.update(verdict="like", reason=f"보상 도파민(PAM) {pam}Hz ≥ 문턱 {t_pam}Hz → 초파리 뇌가 강하게 반응한 영상에 좋아요")
-    elif not t_pam:
-        out.update(verdict="neutral", reason="문턱 보정 파일이 없어 좋아요 판정을 하지 않음")
+        out.update(verdict="like", reason=f"보상 도파민 PAM {pam}Hz ≥ 회색 화면 문턱 {t_pam}Hz → 초파리 뇌가 강하게 반응한 영상에 좋아요")
+    elif t_appr and appr >= t_appr and (t_ppl1_like is None or ppl1 <= t_ppl1_like):
+        out.update(verdict="like", reason=f"다가가기 명령 oDN1·P9 {appr}Hz ≥ 기준 릴스 상위 1/3 {t_appr}Hz, 처벌 PPL1은 낮음 "
+                                          f"→ 초파리 뇌가 강하게 반응한 영상에 좋아요(보상 도파민 PAM {pam}Hz)")
     else:
-        out.update(verdict="neutral", reason=f"보상 PAM {pam}Hz < 문턱 {t_pam}Hz, 도주·처벌 문턱도 안 넘음 → 조금 보고 넘김")
+        out.update(verdict="neutral", reason=f"다가가기 {appr}Hz < {t_appr}Hz 또는 처벌 PPL1이 높음, 보상 PAM {pam}Hz → 조금 보고 넘김")
     return out
 
 
@@ -296,7 +310,8 @@ class Hub:
             self.reel.update(watch=round(plan["watch"], 1), likeAt=None if plan["like_at"] is None else round(plan["like_at"], 1))
             await self.send_all(self.reel)
             await self.send_all({"type": "brain", "id": rid, "status": "done", **{k: j.get(k) for k in
-                                 ("verdict", "reason", "values", "thresholds", "reward_index", "punish_index", "escape_index")}})
+                                 ("verdict", "reason", "values", "thresholds", "reward_index", "approach_index",
+                                  "punish_index", "escape_index")}})
             log("REEL", json.dumps({"id": rid, "author": info.get("author"), "verdict": j.get("verdict"),
                                     "watch": self.reel["watch"], "likeAt": self.reel["likeAt"],
                                     "values": j.get("values"), "brain_wall_s": plan.get("brain_wall_s")}, ensure_ascii=False))
@@ -331,7 +346,8 @@ class Hub:
             "capture": {"seconds": self.args.brain_seconds, "fps": self.args.brain_fps, "frames": plan.get("frames_captured")},
             "judge": j, "watched_s": round(watched, 2), "like_at_s": plan["like_at"], "liked_on_instagram": liked_real,
             "brain_wall_s": plan.get("brain_wall_s"),
-            "readout_sources": {"PAM": "Liu et al. 2012 Nature 488:512; Burke et al. 2012 Nature 492:433",
+            "readout_sources": {"approach(oDN1·P9)": "Bidaye et al. 2020 Neuron 108:469",
+                                "PAM": "Liu et al. 2012 Nature 488:512; Burke et al. 2012 Nature 492:433",
                                 "PPL1": "Aso et al. 2010 Curr Biol 20:1445; Aso et al. 2012 PLoS Genet 8:e1002768",
                                 "GF": "von Reyn et al. 2014 Nat Neurosci 17:962; 문턱 embodied brain_body_bridge 0.3×200Hz"},
             "brain": plan.get("brain"),

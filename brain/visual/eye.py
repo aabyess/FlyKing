@@ -103,7 +103,8 @@ def summarize(eyes, fps):
 
 def synthetic(kind, seconds=2.0, fps=10.0, h=256, w=144):
     """검증용 인공 자극(uint8 프레임). gray: 정지 회색, flicker: 전체 깜빡임 5Hz,
-    loom: 흰 바탕에 검은 원이 가운데로 다가옴(루밍 — 도망 회로 검증), bars: 오른쪽으로 흐르는 줄무늬."""
+    loom: 흰 바탕에 검은 원이 가운데로 다가옴(루밍 — 도망 회로 검증), bars: 오른쪽으로 흐르는 줄무늬,
+    vbars: 아래로 흐르는 줄무늬, dot: 작은 검은 점이 가로질러 감."""
     n = int(round(seconds * fps))
     yy, xx = np.mgrid[0:h, 0:w]
     frames = np.empty((n, h, w, 3), np.uint8)
@@ -121,6 +122,12 @@ def synthetic(kind, seconds=2.0, fps=10.0, h=256, w=144):
             img = np.where((xx - w / 2) ** 2 + (yy - h / 2) ** 2 < r * r, 10.0, 235.0)
         elif kind == "bars":
             img = np.where(((xx + t * 60) // 16) % 2 == 0, 230.0, 25.0)
+        elif kind == "vbars":
+            img = np.where(((yy + t * 60) // 16) % 2 == 0, 230.0, 25.0)
+        elif kind == "dot":
+            # 흰 바탕에 작은 검은 점(지름 약 7°)이 왼쪽→오른쪽으로 지나감 — 작은 물체 움직임 기준
+            cx = (t / seconds) * w
+            img = np.where((xx - cx) ** 2 + (yy - h * 0.45) ** 2 < (w * 0.05) ** 2, 10.0, 235.0)
         else:
             raise ValueError(kind)
         frames[k] = np.repeat(img[..., None], 3, axis=2).astype(np.uint8)

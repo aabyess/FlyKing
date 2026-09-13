@@ -56,6 +56,7 @@ window.onFlyMessage = (m) => {
       $('h-reason').textContent = m.reason || '';
       const v = m.values || {}, t = m.thresholds || {};
       setMeter('reward', v.PAM_mean_hz, t.PAM_mean_hz, 'Hz');
+      setMeter('approach', v.approach_hz, t.approach_hz, 'Hz');
       setMeter('punish', v.PPL1_mean_hz, t.PPL1_mean_hz, 'Hz');
       setMeter('escape', v.GF_peak50ms_hz, t.GF_peak50ms_hz, 'Hz');
     }

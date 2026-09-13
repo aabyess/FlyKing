@@ -14,7 +14,7 @@ const REAR_DEG = 14;        // 폰 볼 때 몸을 세우는 각(뒷다리 축)
 const REACH_X = 13.0;       // 하트까지 앞다리 밑동에서 떨어질 가로 거리(장면 단위, 초파리 몸길이 25)
 const HEAD_CLEAR = 1.5;     // 머리와 화면 사이 최소 간격
 const WALK_S = 3.2, RISE_S = 0.9;
-const TIP_LEN = 0.084;      // Tarsus5 뼈 길이(뼈 로컬 단위 = 실제 mm)
+const TIP_LEN = 0.082;      // Tarsus5 뼈 길이(뼈 로컬 단위 = 실제 mm). 2026-09-13 body 재생성 실측 0.081~0.082
 const UI = { heart: [0.88, 0.66], swipeFrom: [0.5, 0.86], swipeTo: [0.5, 0.52], restL: [0.28, 0.975], restR: [0.72, 0.975] };
 
 // ---------- 렌더러·장면 ----------

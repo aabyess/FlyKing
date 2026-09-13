@@ -27,7 +27,7 @@ from mathutils import Matrix, Vector
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-BODY = os.path.join(ROOT, "body")
+BODY = os.environ.get("FLYKING_BODY") or os.path.join(ROOT, "body")   # 다른 체크아웃의 최신 몸을 쓰려면 FLYKING_BODY로 지정
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
 
