@@ -1,0 +1,34 @@
+{
+ "created": "2026-09-13 14:27:55",
+ "sigma": 0.1836,
+ "sigma_note": "합 200 시냅스 이상 유형 쌍의 좌우 log 비 IQR/1.349/√2 — 한 반구(한 개체의 한쪽)의 유형 쌍 연결 세기 흔들림",
+ "hemisphere_bias_log": 0.0,
+ "pairs_both_sides": 718044,
+ "by_strength": [
+  {
+   "total_synapses": "10~50",
+   "pairs": 234701,
+   "sigma_sd": 0.6805,
+   "sigma_iqr": 0.5759
+  },
+  {
+   "total_synapses": "50~200",
+   "pairs": 69307,
+   "sigma_sd": 0.4461,
+   "sigma_iqr": 0.3332
+  },
+  {
+   "total_synapses": "200~1000",
+   "pairs": 16703,
+   "sigma_sd": 0.3298,
+   "sigma_iqr": 0.2029
+  },
+  {
+   "total_synapses": "1000~",
+   "pairs": 4590,
+   "sigma_sd": 0.222,
+   "sigma_iqr": 0.1354
+  }
+ ],
+ "method": "FlyWire v783 같은 반구 안 연결, cell_type 쌍별 시냅스 합, log(왼/오) − 중앙값"
+}

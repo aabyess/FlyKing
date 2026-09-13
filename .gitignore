@@ -17,3 +17,14 @@ data/
 
 # 장면 미리보기 렌더
 scene/renders/
+
+# 유니티(공장 게임) — 캐시·빌드 산출물은 git에서 뺀다
+factory/unity/*/Library/
+factory/unity/*/Temp/
+factory/unity/*/Logs/
+factory/unity/*/UserSettings/
+factory/unity/*/obj/
+factory/unity/*/Build/
+factory/unity/*/ClaudeBridge/
+factory/unity/*/*.csproj
+factory/unity/*/*.sln
