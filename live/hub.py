@@ -1,25 +1,31 @@
-"""FlyKing 라이브 허브 — 인스타 릴스 ⇄ 3D 초파리 뷰어 중계.
+"""FlyKing 라이브 허브 — 인스타 릴스 ⇄ 초파리 뇌 모델 ⇄ 3D 초파리 뷰어 중계.
 
 실행:
-  ~/flybrain/insta/.venv/bin/python live/hub.py                      # 실제 인스타, 좋아요는 가짜(뷰어에만 표시)
-  ~/flybrain/insta/.venv/bin/python live/hub.py --like=real          # 실제로 좋아요까지 누름
-  ~/flybrain/insta/.venv/bin/python live/hub.py --source=mock        # 인스타 없이 저장된 프레임으로 시험
+  ~/flybrain/insta/.venv/bin/python live/hub.py                      # 실제 인스타, 뇌 판단, 좋아요는 가짜(뷰어에만 표시)
+  ~/flybrain/insta/.venv/bin/python live/hub.py --like=real          # 실제로 좋아요까지 누름(사장님이 켤 때만)
+  ~/flybrain/insta/.venv/bin/python live/hub.py --decider=random     # 비교용 무작위 규칙
+  ~/flybrain/insta/.venv/bin/python live/hub.py --source=mock        # 인스타 없이 인공 자극(회색·루밍·줄무늬·깜빡임)으로 시험
 그다음 브라우저로 http://127.0.0.1:8765/ 을 연다.
 
-흐름(릴스 하나):
-  1. 허브가 인스타 화면에서 릴스 정보(작성자·길이·좋아요 수)를 읽고 영상 프레임을 초당 fps장 뷰어로 보낸다.
-  2. 판단 규칙이 몇 초 볼지, 좋아요를 누를지 정한다. ⚠ 지금은 임시 무작위 규칙 — 뇌 모델 연결 전 자리.
-  3. 좋아요 시각이 되면 뷰어에 「like」 동작을 요청 → 초파리 앞다리가 하트에 닿는 순간 뷰어가 touch를 보냄
-     → 그때 허브가 인스타에서 좋아요를 누른다(가짜 모드면 누르지 않고 뷰어에만 표시).
-  4. 다 보면 「swipe」 요청 → 앞다리로 화면을 끌어올린 순간 touch → 허브가 다음 릴스로 넘긴다.
-  뷰어가 안 붙어 있거나 8초 안에 touch가 없으면 허브가 그냥 진행한다.
+흐름(릴스 하나, --decider=brain):
+  1. 릴스 정보를 읽고 영상 프레임을 뷰어로 계속 보낸다(연출용).
+  2. 첫 --brain-seconds초(기본 1초) 프레임을 초당 --brain-fps장(기본 10) 모아 뇌 서버(brain/visual/brain_eval.py --serve)로 보낸다.
+     뇌 서버는 겹눈 변환(eye.py) → 광수용체 입력 → Shiu 전뇌 모델 → 도파민 뉴런·거대섬유 발화율을 돌려준다.
+  3. judge()가 문턱(brain/visual/calibration.json)과 비교해 판정한다.
+       도주   : 거대섬유 50ms 최고 발화 ≥ 60Hz, 또는 PPL1(처벌) 지수가 문턱을 넘고 PAM(보상) 지수보다 큼 → 바로 넘김
+       좋아요 : PAM(보상 도파민 뉴런) 평균 발화 ≥ 문턱 → 「초파리 뇌가 강하게 반응한 영상에 좋아요」 후 오래 봄
+       보통   : 둘 다 아님 → 조금 보고 넘김
+  4. 앞다리가 닿는 순간 좋아요·넘기기를 실행하고, 릴스마다 전체 수치를 ~/flybrain/insta/results/brain/ 에 JSON으로 남긴다.
+  ⚠ 초파리는 영상 내용(사람·자막·웃김)을 모른다. 밝기·움직임에 대한 타고난 시각 반응일 뿐이고, 연결 세기가 고정이라 학습·취향이 없다.
 
-프로토콜(WebSocket /ws): 허브→뷰어 텍스트 JSON {type: hello|reel|act|liked|progress}, 영상 프레임은 바이너리 JPEG.
+프로토콜(WebSocket /ws): 허브→뷰어 텍스트 JSON {type: hello|reel|brain|act|liked|progress}, 영상 프레임은 바이너리 JPEG.
 뷰어→허브 {type: "touch", id}.
 """
 import argparse
 import asyncio
 import base64
+import hashlib
+import io
 import json
 import math
 import random
@@ -27,14 +33,26 @@ import sys
 import time
 from pathlib import Path
 
+import numpy as np
 from aiohttp import WSMsgType, web
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 WEB = HERE / "web"
 sys.path.insert(0, str(ROOT / "insta"))
+sys.path.insert(0, str(ROOT / "brain" / "visual"))
 from common import IG, PROFILE_DIR, RESULTS_DIR  # noqa: E402
 from reels import READ_JS  # noqa: E402
+
+import eye  # noqa: E402
+from capture_clips import RAW_JS, H as CAP_H, W as CAP_W  # noqa: E402
+
+BRAIN_PY = Path.home() / "flybrain" / "shiu-brain-model" / ".venv" / "bin" / "python"
+BRAIN_EVAL = ROOT / "brain" / "visual" / "brain_eval.py"
+CALIB = ROOT / "brain" / "visual" / "calibration.json"
+BRAIN_DIR = RESULTS_DIR / "brain"
+NEUTRAL_WATCH_S = 5.0
+LIKE_EXTRA_WATCH_S = 5.0
 
 # 화면에서 가장 많이 보이는 video를 cover 맞춤으로 JPEG 추출(2026-09-13 확인: canvas 오염 없음, 1장 약 67ms).
 GRAB_JS = r"""
@@ -66,6 +84,84 @@ def finite(x, default):
     return x if isinstance(x, (int, float)) and math.isfinite(x) and x > 0 else default
 
 
+def judge(res, calib):
+    """뇌 결과 → 판정. 문턱·값·지수를 모두 담아 돌려준다(기록·뷰어 표시용)."""
+    pam = res["dopamine"]["PAM"]["mean_hz"]
+    ppl1 = res["dopamine"]["PPL1"]["mean_hz"]
+    gf = res["groups"]["GF"]["peak50ms_hz"]
+    thr = (calib or {}).get("threshold", {})
+    t_pam, t_ppl1, t_gf = thr.get("PAM"), thr.get("PPL1"), thr.get("GF_peak50ms_hz", 60.0)
+    out = {
+        "values": {"PAM_mean_hz": pam, "PPL1_mean_hz": ppl1, "GF_peak50ms_hz": gf},
+        "thresholds": {"PAM_mean_hz": t_pam, "PPL1_mean_hz": t_ppl1, "GF_peak50ms_hz": t_gf},
+        "threshold_source": (calib or {}).get("method", "보정 파일 없음 — brain/visual/calibrate.py 실행 필요"),
+        "reward_index": round(pam / t_pam, 3) if t_pam else None,
+        "punish_index": round(ppl1 / t_ppl1, 3) if t_ppl1 else None,
+        "escape_index": round(gf / t_gf, 3) if t_gf else None,
+    }
+    if gf >= t_gf:
+        out.update(verdict="avoid", reason=f"거대섬유(도약 도주) 최고 발화 {gf}Hz ≥ 문턱 {t_gf}Hz → 바로 넘김")
+    elif t_ppl1 and ppl1 >= t_ppl1 and (not t_pam or ppl1 / t_ppl1 > pam / t_pam):
+        out.update(verdict="avoid", reason=f"처벌 도파민(PPL1) {ppl1}Hz ≥ 문턱 {t_ppl1}Hz, 보상보다 큼 → 바로 넘김")
+    elif t_pam and pam >= t_pam:
+        out.update(verdict="like", reason=f"보상 도파민(PAM) {pam}Hz ≥ 문턱 {t_pam}Hz → 초파리 뇌가 강하게 반응한 영상에 좋아요")
+    elif not t_pam:
+        out.update(verdict="neutral", reason="문턱 보정 파일이 없어 좋아요 판정을 하지 않음")
+    else:
+        out.update(verdict="neutral", reason=f"보상 PAM {pam}Hz < 문턱 {t_pam}Hz, 도주·처벌 문턱도 안 넘음 → 조금 보고 넘김")
+    return out
+
+
+class BrainClient:
+    """뇌 모델 환경의 brain_eval.py --serve 를 자식 프로세스로 띄워 둔다(네트워크는 한 번만 만든다)."""
+
+    def __init__(self):
+        self.proc = None
+        self.pending = {}
+        self.ready = asyncio.Event()
+        self.build_s = None
+
+    async def start(self):
+        (BRAIN_DIR / "tmp").mkdir(parents=True, exist_ok=True)
+        errlog = open(BRAIN_DIR / "brain_server.log", "ab")
+        self.proc = await asyncio.create_subprocess_exec(
+            str(BRAIN_PY), str(BRAIN_EVAL), "--serve", stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE,
+            stderr=errlog, limit=64 * 1024 * 1024)
+        asyncio.create_task(self._reader())
+        log("BRAIN_STARTING (네트워크 만드는 중 — 수십 초~몇 분)")
+
+    async def _reader(self):
+        while True:
+            line = await self.proc.stdout.readline()
+            if not line:
+                log("BRAIN_EXITED — ~/flybrain/insta/results/brain/brain_server.log 확인")
+                for fut in self.pending.values():
+                    if not fut.done():
+                        fut.set_exception(RuntimeError("brain server exited"))
+                return
+            m = json.loads(line)
+            if m.get("type") == "ready":
+                self.build_s = m.get("build_s")
+                self.ready.set()
+                log("BRAIN_READY", self.build_s)
+            else:
+                fut = self.pending.pop(m.get("id"), None)
+                if fut and not fut.done():
+                    fut.set_result(m)
+
+    async def evaluate(self, frames, fps, key, timeout=300):
+        path = BRAIN_DIR / "tmp" / f"{key}.npz"
+        np.savez(path, frames=frames, fps=fps)
+        fut = asyncio.get_running_loop().create_future()
+        self.pending[key] = fut
+        self.proc.stdin.write((json.dumps({"id": key, "npz": str(path)}) + "\n").encode())
+        await self.proc.stdin.drain()
+        try:
+            return await asyncio.wait_for(fut, timeout)
+        finally:
+            path.unlink(missing_ok=True)
+
+
 class Hub:
     def __init__(self, args):
         self.args = args
@@ -76,6 +172,8 @@ class Hub:
         self.seen = 0
         self.liked_total = 0
         self.rng = random.Random(args.seed)
+        self.brain = BrainClient() if args.decider == "brain" else None
+        self.calib = json.loads(CALIB.read_text()) if CALIB.exists() else None
 
     async def send_all(self, msg):
         data = json.dumps(msg, ensure_ascii=False)
@@ -98,7 +196,8 @@ class Hub:
         await ws.prepare(request)
         self.clients.add(ws)
         log("VIEWER_CONNECTED", len(self.clients))
-        await ws.send_str(json.dumps({"type": "hello", "source": self.args.source, "like": self.args.like}))
+        await ws.send_str(json.dumps({"type": "hello", "source": self.args.source, "like": self.args.like,
+                                      "decider": self.args.decider}))
         if self.reel:
             await ws.send_str(json.dumps(self.reel, ensure_ascii=False))
         if self.last_frame:
@@ -138,16 +237,41 @@ class Hub:
         finally:
             self.pending.pop(key, None)
 
-    def decide(self, info):
-        """⚠ 임시 판단 규칙(뇌 모델 연결 전). 볼 시간(초)과 좋아요 시각(초, 안 누르면 None)."""
+    def random_plan(self, info):
+        """비교용 무작위 규칙(--decider=random). 볼 시간과 좋아요 시각(릴스 시작 기준 초)."""
         dur = finite(info.get("duration"), 10.0)
         watch = min(max(dur, 4.0), self.args.max_watch) * self.rng.uniform(0.45, 1.0)
-        like_at = None
-        if not info.get("liked") and self.rng.random() < self.args.like_prob:
-            like_at = watch * self.rng.uniform(0.35, 0.65)
-        return watch, like_at
+        like_at = watch * self.rng.uniform(0.35, 0.65) if (not info.get("liked") and self.rng.random() < self.args.like_prob) else None
+        return {"watch": watch, "like_at": like_at, "judge": {"verdict": "random", "reason": f"무작위 규칙(좋아요 확률 {self.args.like_prob})"}}
+
+    async def brain_plan(self, src, info, rid, t_start):
+        await self.send_all({"type": "brain", "id": rid, "status": "capturing"})
+        frames = await src.capture(self.args.brain_seconds, self.args.brain_fps)
+        await self.send_all({"type": "brain", "id": rid, "status": "computing"})
+        key = hashlib.sha1(f"{rid}{time.time()}".encode()).hexdigest()[:12]
+        t0 = time.monotonic()
+        res = await self.brain.evaluate(frames, self.args.brain_fps, key)
+        if res.get("type") != "result":
+            raise RuntimeError(res.get("error", "brain error"))
+        j = judge(res, self.calib)
+        elapsed = time.monotonic() - t_start
+        dur = finite(info.get("duration"), 10.0)
+        if j["verdict"] == "avoid":
+            watch, like_at = elapsed + 0.5, None
+        elif j["verdict"] == "like" and not info.get("liked"):
+            like_at = elapsed + 0.3
+            watch = max(elapsed + LIKE_EXTRA_WATCH_S, min(dur, self.args.max_watch))
+        else:
+            watch, like_at = max(elapsed + 1.5, NEUTRAL_WATCH_S), None
+        return {"watch": watch, "like_at": like_at, "judge": j, "brain": res, "brain_wall_s": round(time.monotonic() - t0, 2),
+                "frames_captured": int(len(frames))}
 
     async def session(self, src):
+        if self.brain:
+            await self.brain.start()
+            await self.brain.ready.wait()
+            if not self.calib:
+                log("WARN_NO_CALIBRATION — brain/visual/calibrate.py를 먼저 돌리면 좋아요 판정이 켜진다")
         n = 0
         while self.args.max_reels == 0 or n < self.args.max_reels:
             info = await src.read()
@@ -157,31 +281,69 @@ class Hub:
             n += 1
             self.seen += 1
             rid = info["url"]
-            watch, like_at = self.decide(info)
+            t_start = time.monotonic()
             self.reel = {"type": "reel", "id": rid, "author": info.get("author"), "caption": info.get("caption"),
                          "likeCount": info.get("likeCount"), "liked": bool(info.get("liked")),
-                         "duration": finite(info.get("duration"), 0), "watch": round(watch, 1),
-                         "likeAt": None if like_at is None else round(like_at, 1),
-                         "seen": self.seen, "likedTotal": self.liked_total}
+                         "duration": finite(info.get("duration"), 0), "watch": None, "likeAt": None,
+                         "seen": self.seen, "likedTotal": self.liked_total, "decider": self.args.decider}
             await self.send_all(self.reel)
-            log("REEL", json.dumps({k: self.reel[k] for k in ("id", "author", "duration", "watch", "likeAt")}, ensure_ascii=False))
+            try:
+                plan = await self.brain_plan(src, info, rid, t_start) if self.brain else self.random_plan(info)
+            except Exception as e:  # noqa: BLE001
+                log("BRAIN_FAIL", repr(e))
+                plan = {"watch": NEUTRAL_WATCH_S, "like_at": None, "judge": {"verdict": "error", "reason": f"뇌 계산 실패: {e!r}"}}
+            j = plan["judge"]
+            self.reel.update(watch=round(plan["watch"], 1), likeAt=None if plan["like_at"] is None else round(plan["like_at"], 1))
+            await self.send_all(self.reel)
+            await self.send_all({"type": "brain", "id": rid, "status": "done", **{k: j.get(k) for k in
+                                 ("verdict", "reason", "values", "thresholds", "reward_index", "punish_index", "escape_index")}})
+            log("REEL", json.dumps({"id": rid, "author": info.get("author"), "verdict": j.get("verdict"),
+                                    "watch": self.reel["watch"], "likeAt": self.reel["likeAt"],
+                                    "values": j.get("values"), "brain_wall_s": plan.get("brain_wall_s")}, ensure_ascii=False))
 
-            t0 = time.monotonic()
-            like_done = like_at is None
-            while time.monotonic() - t0 < watch:
-                await asyncio.sleep(0.2)
-                if not like_done and time.monotonic() - t0 >= like_at:
-                    like_done = True
-                    await self.request_action("like", rid)
-                    ok = await src.like() if self.args.like == "real" else True
-                    self.liked_total += int(ok)
-                    await self.send_all({"type": "liked", "id": rid, "liked": ok, "fake": self.args.like != "real",
-                                         "likedTotal": self.liked_total})
-                    log("LIKE", "real" if self.args.like == "real" else "fake", ok)
+            liked_real = None
+            if plan["like_at"] is not None:
+                await asyncio.sleep(max(0.0, t_start + plan["like_at"] - time.monotonic()))
+                touched = await self.request_action("like", rid)
+                ok = await src.like() if self.args.like == "real" else True
+                liked_real = ok if self.args.like == "real" else False
+                self.liked_total += int(ok)
+                await self.send_all({"type": "liked", "id": rid, "liked": ok, "fake": self.args.like != "real",
+                                     "likedTotal": self.liked_total})
+                log("LIKE", self.args.like, ok, "touched" if touched else "no-touch")
+            await asyncio.sleep(max(0.0, t_start + plan["watch"] - time.monotonic()))
             await self.request_action("swipe", rid)
+            watched = time.monotonic() - t_start
             moved = await src.next()
             log("SWIPE", moved)
+            self.record(info, plan, watched, liked_real)
         log("SESSION_DONE", self.seen)
+
+    def record(self, info, plan, watched, liked_real):
+        """릴스마다 판정 근거를 남긴다: decisions.jsonl(한 줄 요약) + reels/<시각>.json(전체 수치)."""
+        BRAIN_DIR.mkdir(parents=True, exist_ok=True)
+        (BRAIN_DIR / "reels").mkdir(exist_ok=True)
+        stamp = time.strftime("%Y%m%d-%H%M%S")
+        j = plan["judge"]
+        full = {
+            "time": time.strftime("%Y-%m-%d %H:%M:%S"), "decider": self.args.decider, "like_mode": self.args.like,
+            "reel": {k: info.get(k) for k in ("url", "author", "caption", "duration", "likeCount")},
+            "capture": {"seconds": self.args.brain_seconds, "fps": self.args.brain_fps, "frames": plan.get("frames_captured")},
+            "judge": j, "watched_s": round(watched, 2), "like_at_s": plan["like_at"], "liked_on_instagram": liked_real,
+            "brain_wall_s": plan.get("brain_wall_s"),
+            "readout_sources": {"PAM": "Liu et al. 2012 Nature 488:512; Burke et al. 2012 Nature 492:433",
+                                "PPL1": "Aso et al. 2010 Curr Biol 20:1445; Aso et al. 2012 PLoS Genet 8:e1002768",
+                                "GF": "von Reyn et al. 2014 Nat Neurosci 17:962; 문턱 embodied brain_body_bridge 0.3×200Hz"},
+            "brain": plan.get("brain"),
+        }
+        path = BRAIN_DIR / "reels" / f"{stamp}.json"
+        path.write_text(json.dumps(full, ensure_ascii=False, indent=1))
+        line = {"time": full["time"], "url": info.get("url"), "author": info.get("author"), "verdict": j.get("verdict"),
+                "reason": j.get("reason"), "values": j.get("values"), "thresholds": j.get("thresholds"),
+                "reward_index": j.get("reward_index"), "punish_index": j.get("punish_index"), "escape_index": j.get("escape_index"),
+                "input": (plan.get("brain") or {}).get("input"), "watched_s": full["watched_s"], "file": str(path)}
+        with open(BRAIN_DIR / "decisions.jsonl", "a") as f:
+            f.write(json.dumps(line, ensure_ascii=False) + "\n")
 
 
 class InstaSource:
@@ -219,6 +381,27 @@ class InstaSource:
                     pass
             await asyncio.sleep(max(0.0, period - (time.perf_counter() - t0)))
 
+    async def capture(self, seconds, fps):
+        frames = []
+        t_end = time.monotonic() + seconds
+        while time.monotonic() < t_end or not frames:
+            t0 = time.monotonic()
+            try:
+                r = await self.page.evaluate(RAW_JS, [CAP_W, CAP_H])
+                if r:
+                    frames.append(np.frombuffer(base64.b64decode(r["rgb"]), np.uint8).reshape(CAP_H, CAP_W, 3))
+            except Exception:  # noqa: BLE001
+                pass
+            await asyncio.sleep(max(0.0, 1.0 / fps - (time.monotonic() - t0)))
+            if time.monotonic() > t_end + 3:
+                break
+        want = int(round(seconds * fps))
+        if not frames:
+            frames = [np.zeros((CAP_H, CAP_W, 3), np.uint8)]
+        while len(frames) < want:
+            frames.append(frames[-1])
+        return np.stack(frames[:want])
+
     async def read(self):
         return await self.page.evaluate(READ_JS)
 
@@ -245,27 +428,54 @@ class InstaSource:
 
 
 class MockSource:
-    """인스타 없이 시험: 전에 저장한 릴스 프레임을 돌려 가며 보여 준다."""
+    """인스타 없이 시험: 인공 자극(eye.synthetic)과 저장한 릴스 조각(results/clips)을 번갈아 보여 준다."""
 
     def __init__(self, hub):
         self.hub = hub
-        self.files = sorted((RESULTS_DIR / "check").glob("frame_*.png")) + sorted((RESULTS_DIR / "probe").glob("reel_*.png"))
+        self.items = [("synthetic", k) for k in ("gray", "loom", "bars", "flicker")]
+        self.items += [("clip", p) for p in sorted((RESULTS_DIR / "clips").glob("clip_*.npz"))]
         self.i = 0
         self.liked = False
+        self.cache = {}
+
+    def frames(self, seconds=2.0, fps=10.0):
+        kind, what = self.items[self.i % len(self.items)]
+        key = (kind, str(what))
+        if key not in self.cache:
+            if kind == "synthetic":
+                self.cache[key] = eye.synthetic(what, seconds, fps)
+            else:
+                self.cache[key] = np.load(what)["frames"]
+        return self.cache[key]
 
     async def start(self, p=None):
-        log("MOCK_FRAMES", len(self.files))
+        log("MOCK_ITEMS", [f"{k}:{Path(str(w)).name}" for k, w in self.items])
         asyncio.create_task(self.frame_loop())
 
     async def frame_loop(self):
+        from PIL import Image
+        k = 0
         while True:
-            if self.files and self.hub.clients:
-                await self.hub.send_frame(self.files[self.i % len(self.files)].read_bytes())
-            await asyncio.sleep(0.5)
+            if self.hub.clients:
+                fr = self.frames()
+                buf = io.BytesIO()
+                Image.fromarray(fr[k % len(fr)]).resize((432, 768)).save(buf, "JPEG", quality=80)
+                await self.hub.send_frame(buf.getvalue())
+                k += 1
+            await asyncio.sleep(0.1)
+
+    async def capture(self, seconds, fps):
+        await asyncio.sleep(seconds)
+        fr = self.frames()
+        want = int(round(seconds * fps))
+        reps = int(np.ceil(want / len(fr)))
+        return np.concatenate([fr] * reps)[:want]
 
     async def read(self):
-        return {"url": f"mock://reel/{self.i}", "author": f"mock_reel_{self.i}", "caption": "인스타 없이 시험하는 가짜 릴스입니다",
-                "likeCount": f"{3 + self.i}.{self.i}만", "liked": self.liked, "duration": 9.0}
+        kind, what = self.items[self.i % len(self.items)]
+        name = what if kind == "synthetic" else Path(str(what)).stem
+        return {"url": f"mock://{kind}/{name}/{self.i}", "author": f"시험:{name}", "caption": "인스타 없이 시험하는 자극입니다",
+                "likeCount": "—", "liked": self.liked, "duration": 9.0}
 
     async def like(self):
         self.liked = True
@@ -280,8 +490,11 @@ class MockSource:
 async def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--source", choices=["insta", "mock"], default="insta")
+    ap.add_argument("--decider", choices=["brain", "random"], default="brain")
     ap.add_argument("--like", choices=["fake", "real"], default="fake")
-    ap.add_argument("--like-prob", type=float, default=0.35)
+    ap.add_argument("--like-prob", type=float, default=0.35, help="--decider=random 전용")
+    ap.add_argument("--brain-seconds", type=float, default=1.0)
+    ap.add_argument("--brain-fps", type=float, default=10.0)
     ap.add_argument("--max-watch", type=float, default=14.0)
     ap.add_argument("--max-reels", type=int, default=0, help="0이면 끝없이")
     ap.add_argument("--fps", type=float, default=10.0)
@@ -301,7 +514,7 @@ async def main():
     runner = web.AppRunner(app)
     await runner.setup()
     await web.TCPSite(runner, "127.0.0.1", args.port).start()
-    log(f"HUB_READY http://127.0.0.1:{args.port}/ source={args.source} like={args.like}")
+    log(f"HUB_READY http://127.0.0.1:{args.port}/ source={args.source} decider={args.decider} like={args.like}")
 
     if args.source == "mock":
         src = MockSource(hub)
@@ -313,6 +526,8 @@ async def main():
             src = InstaSource(hub)
             await src.start(p)
             await hub.session(src)
+    if hub.brain and hub.brain.proc:
+        hub.brain.proc.stdin.close()
     await asyncio.sleep(1.0)
     await runner.cleanup()
 

@@ -43,7 +43,14 @@
   <div class="row"><span>정한 것</span><b id="h-plan">—</b></div>
   <div class="row"><span>초파리</span><b id="h-act">걸어가는 중</b></div>
   <div class="row"><span>누적</span><b class="mono" id="h-total">본 릴스 0 · 좋아요 0</b></div>
-  <div class="note" id="h-note">판단은 임시 무작위 규칙이에요. 뇌 모델을 연결하면 이 자리를 대신해요.</div>
+  <div class="brain" id="h-brain" hidden>
+    <div class="row"><span>뇌 판정</span><b id="h-verdict">—</b></div>
+    <div class="meter"><span>보상 PAM</span><i><em id="m-reward"></em><u></u></i><b class="mono" id="v-reward">—</b></div>
+    <div class="meter"><span>처벌 PPL1</span><i><em id="m-punish"></em><u></u></i><b class="mono" id="v-punish">—</b></div>
+    <div class="meter"><span>도주 GF</span><i><em id="m-escape"></em><u></u></i><b class="mono" id="v-escape">—</b></div>
+    <div class="why" id="h-reason"></div>
+  </div>
+  <div class="note" id="h-note">판단 방식을 기다리는 중이에요.</div>
 </div>
 <div class="cams">
   <button id="cam-wide" type="button">전체 (1)</button>
@@ -51,5 +58,6 @@
   <button id="cam-side" type="button">옆 (3)</button>
 </div>
 <script type="module" src="app.js"></script>
+<script type="module" src="brain_hud.js"></script>
 </body>
 </html>

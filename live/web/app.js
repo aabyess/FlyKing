@@ -179,6 +179,7 @@ function connect() {
       return;
     }
     const m = JSON.parse(ev.data);
+    if (window.onFlyMessage) window.onFlyMessage(m);   // brain_hud.js가 뇌 판정 표시에 쓴다
     if (m.type === 'hello') { state.source = m.source; state.fake = m.like !== 'real'; }
     else if (m.type === 'reel') {
       if (!state.reel || state.reel.id !== m.id) {
@@ -365,8 +366,8 @@ function updateHud(now) {
   const r = state.reel;
   $('h-author').textContent = r ? (r.author || '작성자 모름') : '—';
   const watched = r ? (now - state.reelStart) / 1000 : 0;
-  $('h-time').textContent = r ? `${watched.toFixed(1)}초 / ${r.watch}초 보고 넘김` : '—';
-  $('h-plan').textContent = r ? (r.likeAt != null ? `${r.likeAt}초에 좋아요` : '좋아요 안 누름') : '—';
+  $('h-time').textContent = !r ? '—' : r.watch != null ? `${watched.toFixed(1)}초 / ${r.watch}초 보고 넘김` : `${watched.toFixed(1)}초 · 뇌 판정 기다리는 중`;
+  $('h-plan').textContent = !r ? '—' : r.watch == null ? '정하는 중' : (r.likeAt != null ? `${r.likeAt}초에 좋아요` : '좋아요 안 누름');
   const act = state.action?.m.action;
   $('h-act').textContent = state.phase === 'walk' ? '폰 앞으로 걸어가는 중' : state.phase === 'rise' ? '몸을 세우는 중'
     : act === 'like' ? '오른쪽 앞다리로 좋아요 누르는 중' : act === 'swipe' ? '왼쪽 앞다리로 넘기는 중' : '릴스 보는 중';
