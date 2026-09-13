@@ -1,0 +1,16 @@
+# 파이썬
+__pycache__/
+*.pyc
+.venv/
+
+# Blender 백업·렌더(렌더는 58MB+ — 필요한 것만 docs/로 골라 올린다)
+*.blend1
+body/renders/
+
+# 시뮬레이션 결과·데이터(커넥톰 원본은 ~/flybrain에 둔다 — GitHub 파일 한도 100MB)
+results/
+*.parquet
+*.feather
+data/
+
+.DS_Store

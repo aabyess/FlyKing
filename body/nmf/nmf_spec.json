@@ -1,0 +1,3904 @@
+{
+ "flygym_commit": "38c8ec61034cd59bc5ba0de20688d4a3c0000d60 2026-06-29T01:43:47+02:00",
+ "units": {
+  "length": "mm",
+  "angle": "rad (v1 MJCF compiler angle=radian)",
+  "quat": "MuJoCo (w, x, y, z)"
+ },
+ "frame": "+X 앞 · +Y 왼 · Z 위 (v1 Thorax 쿼터니언 1 0 0 0, 다리 몸 쿼터니언 전부 1 0 0 0 → 모든 각 0이면 다리가 −Z로 곧게 늘어짐)",
+ "v1": {
+  "file": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml",
+  "bodies": {
+   "FlyBody": {
+    "parent": null,
+    "pos": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:98"
+   },
+   "Thorax": {
+    "parent": "FlyBody",
+    "pos": [
+     0.4956452548503876,
+     0.0,
+     1.2966440916061401
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:99"
+   },
+   "A1A2": {
+    "parent": "Thorax",
+    "pos": [
+     -0.861628,
+     0.0,
+     0.0
+    ],
+    "quat": [
+     0.991,
+     0.0,
+     -0.131,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:101"
+   },
+   "A3": {
+    "parent": "A1A2",
+    "pos": [
+     -0.3264735949039459,
+     0.0,
+     0.04
+    ],
+    "quat": [
+     0.999,
+     0.0,
+     -0.043,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:103"
+   },
+   "A4": {
+    "parent": "A3",
+    "pos": [
+     -0.20758499012713935,
+     0.0,
+     0.025
+    ],
+    "quat": [
+     0.999,
+     0.0,
+     0.043,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:105"
+   },
+   "A5": {
+    "parent": "A4",
+    "pos": [
+     -0.17429611215191623,
+     0.0,
+     0.009000000000000001
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.009,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:107"
+   },
+   "A6": {
+    "parent": "A5",
+    "pos": [
+     -0.2280491096907428,
+     0.0,
+     0.009000000000000001
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.009,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:109"
+   },
+   "LHaltere": {
+    "parent": "Thorax",
+    "pos": [
+     -0.8058251738548279,
+     0.2135564610362053,
+     -0.1492682695388794
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:116"
+   },
+   "LWing": {
+    "parent": "Thorax",
+    "pos": [
+     -0.543958768248558,
+     0.3698328882455826,
+     0.18139421939849854
+    ],
+    "quat": [
+     0.7071067657322373,
+     0.0,
+     0.0,
+     0.7071067966408575
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:119"
+   },
+   "RHaltere": {
+    "parent": "Thorax",
+    "pos": [
+     -0.8058251738548279,
+     -0.2135564610362053,
+     -0.1492682695388794
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:122"
+   },
+   "RWing": {
+    "parent": "Thorax",
+    "pos": [
+     -0.543958768248558,
+     -0.3698328882455826,
+     0.18139421939849854
+    ],
+    "quat": [
+     0.7071067657322373,
+     0.0,
+     0.0,
+     -0.7071067966408575
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:125"
+   },
+   "LFCoxa": {
+    "parent": "Thorax",
+    "pos": [
+     -0.16059550642967224,
+     0.1715880036354065,
+     -0.23021531105041504
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:128"
+   },
+   "LFFemur": {
+    "parent": "LFCoxa",
+    "pos": [
+     -0.0018120408058166504,
+     -0.0017162784934043884,
+     -0.36545631289482117
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:133"
+   },
+   "LFTibia": {
+    "parent": "LFFemur",
+    "pos": [
+     -0.004654750227928162,
+     -0.0014884471893310547,
+     -0.7052226180676371
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:137"
+   },
+   "LFTarsus1": {
+    "parent": "LFTibia",
+    "pos": [
+     -0.0001439899206161499,
+     -0.0009515359997749329,
+     -0.5183968131896108
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:140"
+   },
+   "LFTarsus2": {
+    "parent": "LFTarsus1",
+    "pos": [
+     0.001819327473640442,
+     -0.0009769797325134277,
+     -0.22546353936195374
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:143"
+   },
+   "LFTarsus3": {
+    "parent": "LFTarsus2",
+    "pos": [
+     0.001361846923828125,
+     -0.00017764419317245483,
+     -0.15366700291633606
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:146"
+   },
+   "LFTarsus4": {
+    "parent": "LFTarsus3",
+    "pos": [
+     0.0016933828592300415,
+     0.0003032088279724121,
+     -0.09848648309707642
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:149"
+   },
+   "LFTarsus5": {
+    "parent": "LFTarsus4",
+    "pos": [
+     0.0017139166593551636,
+     -0.00021588057279586792,
+     -0.08699280023574829
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:152"
+   },
+   "LHCoxa": {
+    "parent": "Thorax",
+    "pos": [
+     -0.7837215811014175,
+     0.08699344843626022,
+     -0.49661174416542053
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:163"
+   },
+   "LHFemur": {
+    "parent": "LHCoxa",
+    "pos": [
+     -0.00017654895782470703,
+     -0.00022740662097930908,
+     -0.1994171142578125
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:168"
+   },
+   "LHTibia": {
+    "parent": "LHFemur",
+    "pos": [
+     0.00010845065116882324,
+     0.00029414519667625427,
+     -0.83631382137537
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:172"
+   },
+   "LHTarsus1": {
+    "parent": "LHTibia",
+    "pos": [
+     -8.940696716308594e-07,
+     -0.00032403692603111267,
+     -0.6844558641314507
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:175"
+   },
+   "LHTarsus2": {
+    "parent": "LHTarsus1",
+    "pos": [
+     9.690225124359131e-05,
+     0.0005102790892124176,
+     -0.35274285078048706
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:178"
+   },
+   "LHTarsus3": {
+    "parent": "LHTarsus2",
+    "pos": [
+     0.00012344121932983398,
+     -0.0002550967037677765,
+     -0.17505395412445068
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:181"
+   },
+   "LHTarsus4": {
+    "parent": "LHTarsus3",
+    "pos": [
+     -0.00025551021099090576,
+     0.0003306753933429718,
+     -0.09670943021774292
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:184"
+   },
+   "LHTarsus5": {
+    "parent": "LHTarsus4",
+    "pos": [
+     0.00021411478519439697,
+     5.864724516868591e-05,
+     -0.07330363988876343
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:187"
+   },
+   "LMCoxa": {
+    "parent": "Thorax",
+    "pos": [
+     -0.5568711142987013,
+     0.12490109354257584,
+     -0.482208788394928
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:198"
+   },
+   "LMFemur": {
+    "parent": "LMCoxa",
+    "pos": [
+     -0.00021571852266788483,
+     0.00014917179942131042,
+     -0.18144670128822327
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:203"
+   },
+   "LMTibia": {
+    "parent": "LMFemur",
+    "pos": [
+     -0.0009707584977149963,
+     5.524978041648865e-05,
+     -0.7836697474122047
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:207"
+   },
+   "LMTarsus1": {
+    "parent": "LMTibia",
+    "pos": [
+     6.584078073501587e-05,
+     -0.0003695860505104065,
+     -0.667326383292675
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:210"
+   },
+   "LMTarsus2": {
+    "parent": "LMTarsus1",
+    "pos": [
+     0.0005124695599079132,
+     -9.803101420402527e-05,
+     -0.2921527624130249
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:213"
+   },
+   "LMTarsus3": {
+    "parent": "LMTarsus2",
+    "pos": [
+     -2.8055161237716675e-05,
+     -0.00015284493565559387,
+     -0.1596584916114807
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:216"
+   },
+   "LMTarsus4": {
+    "parent": "LMTarsus3",
+    "pos": [
+     -0.00012645311653614044,
+     -0.00019084662199020386,
+     -0.09108459949493408
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:219"
+   },
+   "LMTarsus5": {
+    "parent": "LMTarsus4",
+    "pos": [
+     0.0009016972035169601,
+     9.861961007118225e-05,
+     -0.0635000467300415
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:222"
+   },
+   "RHCoxa": {
+    "parent": "Thorax",
+    "pos": [
+     -0.7837215811014175,
+     -0.08699344843626022,
+     -0.49661174416542053
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:233"
+   },
+   "RHFemur": {
+    "parent": "RHCoxa",
+    "pos": [
+     -0.00017654895782470703,
+     0.00022740662097930908,
+     -0.1994171142578125
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:238"
+   },
+   "RHTibia": {
+    "parent": "RHFemur",
+    "pos": [
+     0.00010845065116882324,
+     -0.00029414519667625427,
+     -0.83631382137537
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:242"
+   },
+   "RHTarsus1": {
+    "parent": "RHTibia",
+    "pos": [
+     -8.940696716308594e-07,
+     0.00032403692603111267,
+     -0.6844558641314507
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:245"
+   },
+   "RHTarsus2": {
+    "parent": "RHTarsus1",
+    "pos": [
+     9.690225124359131e-05,
+     -0.0005102790892124176,
+     -0.35274285078048706
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:248"
+   },
+   "RHTarsus3": {
+    "parent": "RHTarsus2",
+    "pos": [
+     0.00012344121932983398,
+     0.0002550967037677765,
+     -0.17505395412445068
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:251"
+   },
+   "RHTarsus4": {
+    "parent": "RHTarsus3",
+    "pos": [
+     -0.00025551021099090576,
+     -0.0003306753933429718,
+     -0.09670943021774292
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:254"
+   },
+   "RHTarsus5": {
+    "parent": "RHTarsus4",
+    "pos": [
+     0.00021411478519439697,
+     -5.864724516868591e-05,
+     -0.07330363988876343
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:257"
+   },
+   "RMCoxa": {
+    "parent": "Thorax",
+    "pos": [
+     -0.5568711142987013,
+     -0.12490109354257584,
+     -0.482208788394928
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:268"
+   },
+   "RMFemur": {
+    "parent": "RMCoxa",
+    "pos": [
+     -0.00021571852266788483,
+     -0.00014917179942131042,
+     -0.18144670128822327
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:273"
+   },
+   "RMTibia": {
+    "parent": "RMFemur",
+    "pos": [
+     -0.0009707584977149963,
+     -5.524978041648865e-05,
+     -0.7836697474122047
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:277"
+   },
+   "RMTarsus1": {
+    "parent": "RMTibia",
+    "pos": [
+     6.584078073501587e-05,
+     0.0003695860505104065,
+     -0.667326383292675
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:280"
+   },
+   "RMTarsus2": {
+    "parent": "RMTarsus1",
+    "pos": [
+     0.0005124695599079132,
+     9.803101420402527e-05,
+     -0.2921527624130249
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:283"
+   },
+   "RMTarsus3": {
+    "parent": "RMTarsus2",
+    "pos": [
+     -2.8055161237716675e-05,
+     0.00015284493565559387,
+     -0.1596584916114807
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:286"
+   },
+   "RMTarsus4": {
+    "parent": "RMTarsus3",
+    "pos": [
+     -0.00012645311653614044,
+     0.00019084662199020386,
+     -0.09108459949493408
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:289"
+   },
+   "RMTarsus5": {
+    "parent": "RMTarsus4",
+    "pos": [
+     0.0009016972035169601,
+     -9.861961007118225e-05,
+     -0.0635000467300415
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:292"
+   },
+   "RFCoxa": {
+    "parent": "Thorax",
+    "pos": [
+     -0.16059550642967224,
+     -0.1715880036354065,
+     -0.23021531105041504
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:303"
+   },
+   "RFFemur": {
+    "parent": "RFCoxa",
+    "pos": [
+     -0.0018120408058166504,
+     0.0017162784934043884,
+     -0.36545631289482117
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:308"
+   },
+   "RFTibia": {
+    "parent": "RFFemur",
+    "pos": [
+     -0.004654750227928162,
+     0.0014884471893310547,
+     -0.7052226180676371
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:312"
+   },
+   "RFTarsus1": {
+    "parent": "RFTibia",
+    "pos": [
+     -0.0001439899206161499,
+     0.0009515359997749329,
+     -0.5183968131896108
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:315"
+   },
+   "RFTarsus2": {
+    "parent": "RFTarsus1",
+    "pos": [
+     0.001819327473640442,
+     0.0009769797325134277,
+     -0.22546353936195374
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:318"
+   },
+   "RFTarsus3": {
+    "parent": "RFTarsus2",
+    "pos": [
+     0.001361846923828125,
+     0.00017764419317245483,
+     -0.15366700291633606
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:321"
+   },
+   "RFTarsus4": {
+    "parent": "RFTarsus3",
+    "pos": [
+     0.0016933828592300415,
+     -0.0003032088279724121,
+     -0.09848648309707642
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:324"
+   },
+   "RFTarsus5": {
+    "parent": "RFTarsus4",
+    "pos": [
+     0.0017139166593551636,
+     0.00021588057279586792,
+     -0.08699280023574829
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:327"
+   },
+   "Head": {
+    "parent": "Thorax",
+    "pos": [
+     0.02869930863380432,
+     0.0,
+     0.0006983280181884766
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:338"
+   },
+   "LEye": {
+    "parent": "Head",
+    "pos": [
+     0.2314915955066681,
+     -9.313225746154785e-10,
+     0.017043113708496094
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:343"
+   },
+   "REye": {
+    "parent": "Head",
+    "pos": [
+     0.2314915955066681,
+     9.313225746154785e-10,
+     0.017043113708496094
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:346"
+   },
+   "Rostrum": {
+    "parent": "Head",
+    "pos": [
+     0.4300196170806885,
+     0.0,
+     -0.27448439598083496
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:349"
+   },
+   "Haustellum": {
+    "parent": "Rostrum",
+    "pos": [
+     -0.37093329429626465,
+     0.0,
+     -0.019629240036010742
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:351"
+   },
+   "LPedicel": {
+    "parent": "Head",
+    "pos": [
+     0.428972452878952,
+     0.0862061195075512,
+     0.08255249261856079
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:355"
+   },
+   "LFuniculus": {
+    "parent": "LPedicel",
+    "pos": [
+     0.051001936197280884,
+     -0.000562518835067749,
+     -0.044100403785705566
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:360"
+   },
+   "LArista": {
+    "parent": "LFuniculus",
+    "pos": [
+     0.01984727382659912,
+     0.05385337397456169,
+     -0.06828278303146362
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:365"
+   },
+   "RPedicel": {
+    "parent": "Head",
+    "pos": [
+     0.428972452878952,
+     -0.0862061195075512,
+     0.08255249261856079
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:373"
+   },
+   "RFuniculus": {
+    "parent": "RPedicel",
+    "pos": [
+     0.051001936197280884,
+     0.000562518835067749,
+     -0.044100403785705566
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:378"
+   },
+   "RArista": {
+    "parent": "RFuniculus",
+    "pos": [
+     0.01984727382659912,
+     -0.05385337397456169,
+     -0.06828278303146362
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:383"
+   }
+  },
+  "joints": [
+   {
+    "name": "joint_LFCoxa_yaw",
+    "body": "LFCoxa",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:130"
+   },
+   {
+    "name": "joint_LFCoxa",
+    "body": "LFCoxa",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:131"
+   },
+   {
+    "name": "joint_LFCoxa_roll",
+    "body": "LFCoxa",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:132"
+   },
+   {
+    "name": "joint_LFFemur",
+    "body": "LFFemur",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:135"
+   },
+   {
+    "name": "joint_LFFemur_roll",
+    "body": "LFFemur",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:136"
+   },
+   {
+    "name": "joint_LFTibia",
+    "body": "LFTibia",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:138"
+   },
+   {
+    "name": "joint_LFTarsus1",
+    "body": "LFTarsus1",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:141"
+   },
+   {
+    "name": "joint_LFTarsus2",
+    "body": "LFTarsus2",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:144"
+   },
+   {
+    "name": "joint_LFTarsus3",
+    "body": "LFTarsus3",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:147"
+   },
+   {
+    "name": "joint_LFTarsus4",
+    "body": "LFTarsus4",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:150"
+   },
+   {
+    "name": "joint_LFTarsus5",
+    "body": "LFTarsus5",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:153"
+   },
+   {
+    "name": "joint_LHCoxa_yaw",
+    "body": "LHCoxa",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:165"
+   },
+   {
+    "name": "joint_LHCoxa",
+    "body": "LHCoxa",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:166"
+   },
+   {
+    "name": "joint_LHCoxa_roll",
+    "body": "LHCoxa",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:167"
+   },
+   {
+    "name": "joint_LHFemur",
+    "body": "LHFemur",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:170"
+   },
+   {
+    "name": "joint_LHFemur_roll",
+    "body": "LHFemur",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:171"
+   },
+   {
+    "name": "joint_LHTibia",
+    "body": "LHTibia",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:173"
+   },
+   {
+    "name": "joint_LHTarsus1",
+    "body": "LHTarsus1",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:176"
+   },
+   {
+    "name": "joint_LHTarsus2",
+    "body": "LHTarsus2",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:179"
+   },
+   {
+    "name": "joint_LHTarsus3",
+    "body": "LHTarsus3",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:182"
+   },
+   {
+    "name": "joint_LHTarsus4",
+    "body": "LHTarsus4",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:185"
+   },
+   {
+    "name": "joint_LHTarsus5",
+    "body": "LHTarsus5",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:188"
+   },
+   {
+    "name": "joint_LMCoxa_yaw",
+    "body": "LMCoxa",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:200"
+   },
+   {
+    "name": "joint_LMCoxa",
+    "body": "LMCoxa",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:201"
+   },
+   {
+    "name": "joint_LMCoxa_roll",
+    "body": "LMCoxa",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:202"
+   },
+   {
+    "name": "joint_LMFemur",
+    "body": "LMFemur",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:205"
+   },
+   {
+    "name": "joint_LMFemur_roll",
+    "body": "LMFemur",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:206"
+   },
+   {
+    "name": "joint_LMTibia",
+    "body": "LMTibia",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:208"
+   },
+   {
+    "name": "joint_LMTarsus1",
+    "body": "LMTarsus1",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:211"
+   },
+   {
+    "name": "joint_LMTarsus2",
+    "body": "LMTarsus2",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:214"
+   },
+   {
+    "name": "joint_LMTarsus3",
+    "body": "LMTarsus3",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:217"
+   },
+   {
+    "name": "joint_LMTarsus4",
+    "body": "LMTarsus4",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:220"
+   },
+   {
+    "name": "joint_LMTarsus5",
+    "body": "LMTarsus5",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:223"
+   },
+   {
+    "name": "joint_RHCoxa_yaw",
+    "body": "RHCoxa",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:235"
+   },
+   {
+    "name": "joint_RHCoxa",
+    "body": "RHCoxa",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:236"
+   },
+   {
+    "name": "joint_RHCoxa_roll",
+    "body": "RHCoxa",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:237"
+   },
+   {
+    "name": "joint_RHFemur",
+    "body": "RHFemur",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:240"
+   },
+   {
+    "name": "joint_RHFemur_roll",
+    "body": "RHFemur",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:241"
+   },
+   {
+    "name": "joint_RHTibia",
+    "body": "RHTibia",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:243"
+   },
+   {
+    "name": "joint_RHTarsus1",
+    "body": "RHTarsus1",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:246"
+   },
+   {
+    "name": "joint_RHTarsus2",
+    "body": "RHTarsus2",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:249"
+   },
+   {
+    "name": "joint_RHTarsus3",
+    "body": "RHTarsus3",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:252"
+   },
+   {
+    "name": "joint_RHTarsus4",
+    "body": "RHTarsus4",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:255"
+   },
+   {
+    "name": "joint_RHTarsus5",
+    "body": "RHTarsus5",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:258"
+   },
+   {
+    "name": "joint_RMCoxa_yaw",
+    "body": "RMCoxa",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:270"
+   },
+   {
+    "name": "joint_RMCoxa",
+    "body": "RMCoxa",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:271"
+   },
+   {
+    "name": "joint_RMCoxa_roll",
+    "body": "RMCoxa",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:272"
+   },
+   {
+    "name": "joint_RMFemur",
+    "body": "RMFemur",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:275"
+   },
+   {
+    "name": "joint_RMFemur_roll",
+    "body": "RMFemur",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:276"
+   },
+   {
+    "name": "joint_RMTibia",
+    "body": "RMTibia",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:278"
+   },
+   {
+    "name": "joint_RMTarsus1",
+    "body": "RMTarsus1",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:281"
+   },
+   {
+    "name": "joint_RMTarsus2",
+    "body": "RMTarsus2",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:284"
+   },
+   {
+    "name": "joint_RMTarsus3",
+    "body": "RMTarsus3",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:287"
+   },
+   {
+    "name": "joint_RMTarsus4",
+    "body": "RMTarsus4",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:290"
+   },
+   {
+    "name": "joint_RMTarsus5",
+    "body": "RMTarsus5",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:293"
+   },
+   {
+    "name": "joint_RFCoxa_yaw",
+    "body": "RFCoxa",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:305"
+   },
+   {
+    "name": "joint_RFCoxa",
+    "body": "RFCoxa",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:306"
+   },
+   {
+    "name": "joint_RFCoxa_roll",
+    "body": "RFCoxa",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:307"
+   },
+   {
+    "name": "joint_RFFemur",
+    "body": "RFFemur",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:310"
+   },
+   {
+    "name": "joint_RFFemur_roll",
+    "body": "RFFemur",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:311"
+   },
+   {
+    "name": "joint_RFTibia",
+    "body": "RFTibia",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:313"
+   },
+   {
+    "name": "joint_RFTarsus1",
+    "body": "RFTarsus1",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:316"
+   },
+   {
+    "name": "joint_RFTarsus2",
+    "body": "RFTarsus2",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:319"
+   },
+   {
+    "name": "joint_RFTarsus3",
+    "body": "RFTarsus3",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:322"
+   },
+   {
+    "name": "joint_RFTarsus4",
+    "body": "RFTarsus4",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:325"
+   },
+   {
+    "name": "joint_RFTarsus5",
+    "body": "RFTarsus5",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:328"
+   },
+   {
+    "name": "joint_Head_yaw",
+    "body": "Head",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:340"
+   },
+   {
+    "name": "joint_Head",
+    "body": "Head",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:341"
+   },
+   {
+    "name": "joint_Head_roll",
+    "body": "Head",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:342"
+   },
+   {
+    "name": "joint_LPedicel_yaw",
+    "body": "LPedicel",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:357"
+   },
+   {
+    "name": "joint_LPedicel",
+    "body": "LPedicel",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:358"
+   },
+   {
+    "name": "joint_LPedicel_roll",
+    "body": "LPedicel",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:359"
+   },
+   {
+    "name": "joint_LFuniculus_yaw",
+    "body": "LFuniculus",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:362"
+   },
+   {
+    "name": "joint_LFuniculus",
+    "body": "LFuniculus",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:363"
+   },
+   {
+    "name": "joint_LFuniculus_roll",
+    "body": "LFuniculus",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:364"
+   },
+   {
+    "name": "joint_LArista_yaw",
+    "body": "LArista",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:367"
+   },
+   {
+    "name": "joint_LArista",
+    "body": "LArista",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:368"
+   },
+   {
+    "name": "joint_LArista_roll",
+    "body": "LArista",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:369"
+   },
+   {
+    "name": "joint_RPedicel_yaw",
+    "body": "RPedicel",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:375"
+   },
+   {
+    "name": "joint_RPedicel",
+    "body": "RPedicel",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:376"
+   },
+   {
+    "name": "joint_RPedicel_roll",
+    "body": "RPedicel",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:377"
+   },
+   {
+    "name": "joint_RFuniculus_yaw",
+    "body": "RFuniculus",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:380"
+   },
+   {
+    "name": "joint_RFuniculus",
+    "body": "RFuniculus",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:381"
+   },
+   {
+    "name": "joint_RFuniculus_roll",
+    "body": "RFuniculus",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:382"
+   },
+   {
+    "name": "joint_RArista_yaw",
+    "body": "RArista",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "axis_name": "yaw",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:385"
+   },
+   {
+    "name": "joint_RArista",
+    "body": "RArista",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "axis_name": "pitch",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:386"
+   },
+   {
+    "name": "joint_RArista_roll",
+    "body": "RArista",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "axis_name": "roll",
+    "type": "hinge",
+    "range": null,
+    "limited": null,
+    "source": "src/flygym/assets/model/neuromechfly/legacy/flygym1_seqikpy_yawpitchroll.xml:387"
+   }
+  ],
+  "order_by_body": {
+   "LFCoxa": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "LFFemur": [
+    "pitch",
+    "roll"
+   ],
+   "LFTibia": [
+    "pitch"
+   ],
+   "LFTarsus1": [
+    "pitch"
+   ],
+   "LFTarsus2": [
+    "pitch"
+   ],
+   "LFTarsus3": [
+    "pitch"
+   ],
+   "LFTarsus4": [
+    "pitch"
+   ],
+   "LFTarsus5": [
+    "pitch"
+   ],
+   "LHCoxa": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "LHFemur": [
+    "pitch",
+    "roll"
+   ],
+   "LHTibia": [
+    "pitch"
+   ],
+   "LHTarsus1": [
+    "pitch"
+   ],
+   "LHTarsus2": [
+    "pitch"
+   ],
+   "LHTarsus3": [
+    "pitch"
+   ],
+   "LHTarsus4": [
+    "pitch"
+   ],
+   "LHTarsus5": [
+    "pitch"
+   ],
+   "LMCoxa": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "LMFemur": [
+    "pitch",
+    "roll"
+   ],
+   "LMTibia": [
+    "pitch"
+   ],
+   "LMTarsus1": [
+    "pitch"
+   ],
+   "LMTarsus2": [
+    "pitch"
+   ],
+   "LMTarsus3": [
+    "pitch"
+   ],
+   "LMTarsus4": [
+    "pitch"
+   ],
+   "LMTarsus5": [
+    "pitch"
+   ],
+   "RHCoxa": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "RHFemur": [
+    "pitch",
+    "roll"
+   ],
+   "RHTibia": [
+    "pitch"
+   ],
+   "RHTarsus1": [
+    "pitch"
+   ],
+   "RHTarsus2": [
+    "pitch"
+   ],
+   "RHTarsus3": [
+    "pitch"
+   ],
+   "RHTarsus4": [
+    "pitch"
+   ],
+   "RHTarsus5": [
+    "pitch"
+   ],
+   "RMCoxa": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "RMFemur": [
+    "pitch",
+    "roll"
+   ],
+   "RMTibia": [
+    "pitch"
+   ],
+   "RMTarsus1": [
+    "pitch"
+   ],
+   "RMTarsus2": [
+    "pitch"
+   ],
+   "RMTarsus3": [
+    "pitch"
+   ],
+   "RMTarsus4": [
+    "pitch"
+   ],
+   "RMTarsus5": [
+    "pitch"
+   ],
+   "RFCoxa": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "RFFemur": [
+    "pitch",
+    "roll"
+   ],
+   "RFTibia": [
+    "pitch"
+   ],
+   "RFTarsus1": [
+    "pitch"
+   ],
+   "RFTarsus2": [
+    "pitch"
+   ],
+   "RFTarsus3": [
+    "pitch"
+   ],
+   "RFTarsus4": [
+    "pitch"
+   ],
+   "RFTarsus5": [
+    "pitch"
+   ],
+   "Head": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "LPedicel": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "LFuniculus": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "LArista": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "RPedicel": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "RFuniculus": [
+    "yaw",
+    "pitch",
+    "roll"
+   ],
+   "RArista": [
+    "yaw",
+    "pitch",
+    "roll"
+   ]
+  },
+  "joint_count": 87,
+  "joints_with_range": [],
+  "missing": "날개·평균곤·배·주둥이에 관절 없음(몸만 있음)"
+ },
+ "v2": {
+  "rigging": {
+   "c_thorax": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:1",
+    "pos": [
+     0.496,
+     0.0,
+     1.3
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "c_head": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:5",
+    "pos": [
+     0.0287,
+     0.0,
+     0.000698
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "c_rostrum": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:9",
+    "pos": [
+     0.43,
+     0.0,
+     -0.274
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "c_haustellum": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:13",
+    "pos": [
+     -0.371,
+     0.0,
+     -0.0196
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "c_abdomen12": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:17",
+    "pos": [
+     -0.862,
+     0.0,
+     0.0
+    ],
+    "quat": [
+     0.991,
+     0.0,
+     -0.131,
+     0.0
+    ]
+   },
+   "c_abdomen3": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:21",
+    "pos": [
+     -0.326,
+     0.0,
+     0.04
+    ],
+    "quat": [
+     0.999,
+     0.0,
+     -0.043,
+     0.0
+    ]
+   },
+   "c_abdomen4": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:25",
+    "pos": [
+     -0.208,
+     0.0,
+     0.025
+    ],
+    "quat": [
+     0.999,
+     0.0,
+     0.043,
+     0.0
+    ]
+   },
+   "c_abdomen5": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:29",
+    "pos": [
+     -0.174,
+     0.0,
+     0.009
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.009,
+     0.0
+    ]
+   },
+   "c_abdomen6": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:33",
+    "pos": [
+     -0.228,
+     0.0,
+     0.009
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.009,
+     0.0
+    ]
+   },
+   "l_eye": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:37",
+    "pos": [
+     0.231,
+     -9.31e-10,
+     0.017
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "l_pedicel": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:41",
+    "pos": [
+     0.429,
+     0.086,
+     0.083
+    ],
+    "quat": [
+     0.9623,
+     0.2613,
+     0.0729,
+     -0.0194
+    ]
+   },
+   "l_funiculus": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:45",
+    "pos": [
+     0.051,
+     -0.000563,
+     -0.0441
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "l_arista": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:49",
+    "pos": [
+     0.0198,
+     0.0539,
+     -0.0683
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "l_haltere": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:53",
+    "pos": [
+     -0.806,
+     0.214,
+     -0.149
+    ],
+    "quat": [
+     0.946,
+     0.124,
+     0.039,
+     0.298
+    ]
+   },
+   "l_wing": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:57",
+    "pos": [
+     -0.674,
+     0.395,
+     0.081
+    ],
+    "quat": [
+     0.649,
+     0.036,
+     -0.065,
+     0.757
+    ]
+   },
+   "r_eye": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:61",
+    "pos": [
+     0.231,
+     9.31e-10,
+     0.017
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "r_pedicel": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:65",
+    "pos": [
+     0.429,
+     -0.086,
+     0.083
+    ],
+    "quat": [
+     0.9623,
+     -0.2613,
+     0.0729,
+     0.0194
+    ]
+   },
+   "r_funiculus": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:69",
+    "pos": [
+     0.051,
+     0.000563,
+     -0.0441
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "r_arista": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:73",
+    "pos": [
+     0.0198,
+     -0.0539,
+     -0.0683
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "r_haltere": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:77",
+    "pos": [
+     -0.806,
+     -0.214,
+     -0.149
+    ],
+    "quat": [
+     0.946,
+     -0.124,
+     0.039,
+     -0.298
+    ]
+   },
+   "r_wing": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:81",
+    "pos": [
+     -0.674,
+     -0.395,
+     0.081
+    ],
+    "quat": [
+     0.649,
+     -0.036,
+     -0.065,
+     -0.757
+    ]
+   },
+   "lf_coxa": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:85",
+    "pos": [
+     -0.161,
+     0.172,
+     -0.23
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lf_trochanterfemur": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:89",
+    "pos": [
+     -0.00181,
+     -0.00172,
+     -0.365
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lf_tibia": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:93",
+    "pos": [
+     -0.00465,
+     -0.00149,
+     -0.705
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lf_tarsus1": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:97",
+    "pos": [
+     -0.000144,
+     -0.000952,
+     -0.518
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lf_tarsus2": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:101",
+    "pos": [
+     0.00182,
+     -0.000977,
+     -0.225
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lf_tarsus3": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:105",
+    "pos": [
+     0.00136,
+     -0.000178,
+     -0.154
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lf_tarsus4": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:109",
+    "pos": [
+     0.00169,
+     0.000303,
+     -0.0985
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lf_tarsus5": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:113",
+    "pos": [
+     0.00171,
+     -0.000216,
+     -0.087
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lm_coxa": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:117",
+    "pos": [
+     -0.557,
+     0.125,
+     -0.482
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lm_trochanterfemur": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:121",
+    "pos": [
+     -0.000216,
+     0.000149,
+     -0.181
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lm_tibia": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:125",
+    "pos": [
+     -0.000971,
+     5.52e-05,
+     -0.784
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lm_tarsus1": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:129",
+    "pos": [
+     6.58e-05,
+     -0.00037,
+     -0.667
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lm_tarsus2": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:133",
+    "pos": [
+     0.000512,
+     -9.8e-05,
+     -0.292
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lm_tarsus3": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:137",
+    "pos": [
+     -2.81e-05,
+     -0.000153,
+     -0.16
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lm_tarsus4": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:141",
+    "pos": [
+     -0.000126,
+     -0.000191,
+     -0.0911
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lm_tarsus5": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:145",
+    "pos": [
+     0.000902,
+     9.86e-05,
+     -0.0635
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lh_coxa": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:149",
+    "pos": [
+     -0.784,
+     0.087,
+     -0.497
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lh_trochanterfemur": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:153",
+    "pos": [
+     -0.000177,
+     -0.000227,
+     -0.199
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lh_tibia": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:157",
+    "pos": [
+     0.000108,
+     0.000294,
+     -0.836
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lh_tarsus1": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:161",
+    "pos": [
+     -8.94e-07,
+     -0.000324,
+     -0.684
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lh_tarsus2": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:165",
+    "pos": [
+     9.69e-05,
+     0.00051,
+     -0.353
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lh_tarsus3": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:169",
+    "pos": [
+     0.000123,
+     -0.000255,
+     -0.175
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lh_tarsus4": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:173",
+    "pos": [
+     -0.000256,
+     0.000331,
+     -0.0967
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lh_tarsus5": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:177",
+    "pos": [
+     0.000214,
+     5.86e-05,
+     -0.0733
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rf_coxa": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:181",
+    "pos": [
+     -0.161,
+     -0.172,
+     -0.23
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rf_trochanterfemur": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:185",
+    "pos": [
+     -0.00181,
+     0.00172,
+     -0.365
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rf_tibia": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:189",
+    "pos": [
+     -0.00465,
+     0.00149,
+     -0.705
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rf_tarsus1": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:193",
+    "pos": [
+     -0.000144,
+     0.000952,
+     -0.518
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rf_tarsus2": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:197",
+    "pos": [
+     0.00182,
+     0.000977,
+     -0.225
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rf_tarsus3": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:201",
+    "pos": [
+     0.00136,
+     0.000178,
+     -0.154
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rf_tarsus4": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:205",
+    "pos": [
+     0.00169,
+     -0.000303,
+     -0.0985
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rf_tarsus5": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:209",
+    "pos": [
+     0.00171,
+     0.000216,
+     -0.087
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rm_coxa": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:213",
+    "pos": [
+     -0.557,
+     -0.125,
+     -0.482
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rm_trochanterfemur": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:217",
+    "pos": [
+     -0.000216,
+     -0.000149,
+     -0.181
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rm_tibia": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:221",
+    "pos": [
+     -0.000971,
+     -5.52e-05,
+     -0.784
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rm_tarsus1": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:225",
+    "pos": [
+     6.58e-05,
+     0.00037,
+     -0.667
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rm_tarsus2": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:229",
+    "pos": [
+     0.000512,
+     9.8e-05,
+     -0.292
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rm_tarsus3": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:233",
+    "pos": [
+     -2.81e-05,
+     0.000153,
+     -0.16
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rm_tarsus4": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:237",
+    "pos": [
+     -0.000126,
+     0.000191,
+     -0.0911
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rm_tarsus5": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:241",
+    "pos": [
+     0.000902,
+     -9.86e-05,
+     -0.0635
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rh_coxa": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:245",
+    "pos": [
+     -0.784,
+     -0.087,
+     -0.497
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rh_trochanterfemur": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:249",
+    "pos": [
+     -0.000177,
+     0.000227,
+     -0.199
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rh_tibia": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:253",
+    "pos": [
+     0.000108,
+     -0.000294,
+     -0.836
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rh_tarsus1": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:257",
+    "pos": [
+     -8.94e-07,
+     0.000324,
+     -0.684
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rh_tarsus2": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:261",
+    "pos": [
+     9.69e-05,
+     -0.00051,
+     -0.353
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rh_tarsus3": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:265",
+    "pos": [
+     0.000123,
+     0.000255,
+     -0.175
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rh_tarsus4": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:269",
+    "pos": [
+     -0.000256,
+     -0.000331,
+     -0.0967
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "rh_tarsus5": {
+    "source": "src/flygym/assets/model/neuromechfly/rigging.yaml:273",
+    "pos": [
+     0.000214,
+     -5.86e-05,
+     -0.0733
+    ],
+    "quat": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   }
+  },
+  "conventions": {
+   "axis_vectors": {
+    "pitch": {
+     "vector": [
+      0.0,
+      1.0,
+      0.0
+     ],
+     "source": "src/flygym/anatomy.py:99"
+    },
+    "roll": {
+     "vector": [
+      0.0,
+      0.0,
+      1.0
+     ],
+     "source": "src/flygym/anatomy.py:100"
+    },
+    "yaw": {
+     "vector": [
+      1.0,
+      0.0,
+      0.0
+     ],
+     "source": "src/flygym/anatomy.py:101"
+    }
+   },
+   "right_side_flip": {
+    "rule": "오른쪽(child.pos[0]=='r') 몸의 pitch 아닌 축(yaw·roll)은 축 벡터 부호를 뒤집는다",
+    "source": "src/flygym/compose/fly/base_fly.py:397-398",
+    "code": "if jointdof.child.pos[0] == \"r\" and not self._is_pitch(jointdof):"
+   },
+   "dof_order": {
+    "rule": "한 이음의 DoF는 skeleton.axis_order 순서로 차례로 만든다(=MuJoCo에서 부모 쪽부터 곱)",
+    "source": [
+     "src/flygym/compose/fly/base_fly.py:389",
+     "src/flygym/anatomy.py:376"
+    ]
+   },
+   "biological_preset": {
+    "rule": "all_biological: 넓적다리(trochanterfemur)는 yaw 없음, 종아리·발목마디는 pitch만. 날개·평균곤·배·더듬이는 3축",
+    "source": "src/flygym/anatomy.py:422"
+   },
+   "connected_pairs": "src/flygym/anatomy.py:224",
+   "name_pattern": "{parent}-{child}-{axis}  예: c_thorax-lf_coxa-yaw, lf_coxa-lf_trochanterfemur-pitch, c_thorax-l_wing-roll"
+  },
+  "mesh_axes": {
+   "l_wing": {
+    "span": [
+     0.005,
+     1.0,
+     -0.028
+    ],
+    "leading": [
+     0.953,
+     -0.013,
+     -0.302
+    ],
+    "dorsal": [
+     0.302,
+     0.025,
+     0.953
+    ],
+    "length_mm": 2.302,
+    "extent_along_leading_mm": [
+     -0.766,
+     0.35
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/meshes/simplified_max2000faces/l_wing.stl (주축 계산)"
+   },
+   "l_haltere": {
+    "span": [
+     -0.119,
+     0.991,
+     -0.066
+    ],
+    "leading": [
+     -0.793,
+     -0.135,
+     -0.594
+    ],
+    "dorsal": [
+     0.598,
+     0.018,
+     -0.802
+    ],
+    "length_mm": 0.359,
+    "extent_along_leading_mm": [
+     -0.094,
+     0.055
+    ],
+    "source": "src/flygym/assets/model/neuromechfly/meshes/simplified_max2000faces/l_haltere.stl (주축 계산)"
+   },
+   "mirror_rule": {
+    "rule": "오른쪽 조각은 왼쪽 메시를 y 배율 −1로 씀 → 오른쪽 span·dorsal의 y 성분 부호 반대, 오른손 좌표 유지 위해 dorsal = leading × span 다시 계산",
+    "source": "src/flygym/compose/fly/neuromechfly.py:84, src/flygym/compose/fly/neuromechfly.py:100"
+   }
+  }
+ },
+ "ranges": {
+  "nmf": "없음 — v1 MJCF에 range/limited 속성이 하나도 없고, v2 base_fly.add_joints도 range를 주지 않는다(stiffness·damping·springref만)",
+  "walking_observed_v1": {
+   "joint_RFCoxa_yaw": {
+    "min": -0.16631414023186475,
+    "max": 0.18619461725834402,
+    "samples": 45
+   },
+   "joint_RFCoxa": {
+    "min": 0.16037865772191612,
+    "max": 0.7134029034206648,
+    "samples": 45
+   },
+   "joint_RFCoxa_roll": {
+    "min": -1.3210939440118634,
+    "max": -0.6457146749888366,
+    "samples": 45
+   },
+   "joint_RFFemur": {
+    "min": -2.7367891795229844,
+    "max": -1.7405187929553763,
+    "samples": 45
+   },
+   "joint_RFFemur_roll": {
+    "min": -1.0268348344024656,
+    "max": -0.5831712452610962,
+    "samples": 45
+   },
+   "joint_RFTibia": {
+    "min": 1.2663827098571803,
+    "max": 2.165668678944726,
+    "samples": 45
+   },
+   "joint_RFTarsus1": {
+    "min": -0.8999071060574553,
+    "max": -0.4147644798944433,
+    "samples": 45
+   },
+   "joint_LFCoxa_yaw": {
+    "min": -0.18619461725834402,
+    "max": 0.16631414023186475,
+    "samples": 45
+   },
+   "joint_LFCoxa": {
+    "min": 0.16037865772191612,
+    "max": 0.7134029034206648,
+    "samples": 45
+   },
+   "joint_LFCoxa_roll": {
+    "min": 0.6457146749888366,
+    "max": 1.3210939440118634,
+    "samples": 45
+   },
+   "joint_LFFemur": {
+    "min": -2.7367891795229844,
+    "max": -1.7405187929553763,
+    "samples": 45
+   },
+   "joint_LFFemur_roll": {
+    "min": 0.5831712452610962,
+    "max": 1.0268348344024656,
+    "samples": 45
+   },
+   "joint_LFTibia": {
+    "min": 1.2663827098571803,
+    "max": 2.165668678944726,
+    "samples": 45
+   },
+   "joint_LFTarsus1": {
+    "min": -0.8999071060574553,
+    "max": -0.4147644798944433,
+    "samples": 45
+   },
+   "joint_RMCoxa_yaw": {
+    "min": -0.9195429651259656,
+    "max": -0.6543093549018898,
+    "samples": 45
+   },
+   "joint_RMCoxa": {
+    "min": -0.18551277450718645,
+    "max": 0.4021857392798495,
+    "samples": 45
+   },
+   "joint_RMCoxa_roll": {
+    "min": -1.91524682816692,
+    "max": -1.7486739336456083,
+    "samples": 45
+   },
+   "joint_RMFemur": {
+    "min": -1.7059243583911423,
+    "max": -1.1002208463142018,
+    "samples": 45
+   },
+   "joint_RMFemur_roll": {
+    "min": -0.4793910470474865,
+    "max": 0.43494158023058893,
+    "samples": 45
+   },
+   "joint_RMTibia": {
+    "min": 1.8546864876351816,
+    "max": 2.223023526255657,
+    "samples": 45
+   },
+   "joint_RMTarsus1": {
+    "min": -1.0579313923710632,
+    "max": -0.537650953255483,
+    "samples": 45
+   },
+   "joint_LMCoxa_yaw": {
+    "min": 0.6543093549018898,
+    "max": 0.9195429651259656,
+    "samples": 45
+   },
+   "joint_LMCoxa": {
+    "min": -0.18551277450718645,
+    "max": 0.4021857392798495,
+    "samples": 45
+   },
+   "joint_LMCoxa_roll": {
+    "min": 1.7486739336456083,
+    "max": 1.91524682816692,
+    "samples": 45
+   },
+   "joint_LMFemur": {
+    "min": -1.7059243583911423,
+    "max": -1.1002208463142018,
+    "samples": 45
+   },
+   "joint_LMFemur_roll": {
+    "min": -0.43494158023058893,
+    "max": 0.4793910470474865,
+    "samples": 45
+   },
+   "joint_LMTibia": {
+    "min": 1.8546864876351816,
+    "max": 2.223023526255657,
+    "samples": 45
+   },
+   "joint_LMTarsus1": {
+    "min": -1.0579313923710632,
+    "max": -0.537650953255483,
+    "samples": 45
+   },
+   "joint_RHCoxa_yaw": {
+    "min": -0.4821914418093143,
+    "max": -0.23739456560742694,
+    "samples": 45
+   },
+   "joint_RHCoxa": {
+    "min": 0.25693166671205053,
+    "max": 0.7522938650021155,
+    "samples": 45
+   },
+   "joint_RHCoxa_roll": {
+    "min": -2.638818838521335,
+    "max": -2.2026429548992974,
+    "samples": 45
+   },
+   "joint_RHFemur": {
+    "min": -2.1036915320522094,
+    "max": -1.3746911993790336,
+    "samples": 45
+   },
+   "joint_RHFemur_roll": {
+    "min": 0.20960236513927244,
+    "max": 0.41676919432873605,
+    "samples": 45
+   },
+   "joint_RHTibia": {
+    "min": 1.222048576338948,
+    "max": 2.3241490742542235,
+    "samples": 45
+   },
+   "joint_RHTarsus1": {
+    "min": -0.22327548143626386,
+    "max": 0.14783263984231715,
+    "samples": 45
+   },
+   "joint_LHCoxa_yaw": {
+    "min": 0.23739456560742694,
+    "max": 0.4821914418093143,
+    "samples": 45
+   },
+   "joint_LHCoxa": {
+    "min": 0.25693166671205053,
+    "max": 0.7522938650021155,
+    "samples": 45
+   },
+   "joint_LHCoxa_roll": {
+    "min": 2.2026429548992974,
+    "max": 2.638818838521335,
+    "samples": 45
+   },
+   "joint_LHFemur": {
+    "min": -2.1036915320522094,
+    "max": -1.3746911993790336,
+    "samples": 45
+   },
+   "joint_LHFemur_roll": {
+    "min": -0.41676919432873605,
+    "max": -0.20960236513927244,
+    "samples": 45
+   },
+   "joint_LHTibia": {
+    "min": 1.222048576338948,
+    "max": 2.3241490742542235,
+    "samples": 45
+   },
+   "joint_LHTarsus1": {
+    "min": -0.22327548143626386,
+    "max": 0.14783263984231715,
+    "samples": 45
+   }
+  },
+  "walking_source": "src/flygym_demo/complex_terrain/assets/single_steps_untethered.pkl"
+ },
+ "neutral_pose_v2_deg": {
+  "c_thorax-lf_coxa-pitch": {
+   "deg": 19.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:7"
+  },
+  "c_thorax-lf_coxa-roll": {
+   "deg": 33.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:8"
+  },
+  "c_thorax-lf_coxa-yaw": {
+   "deg": -17.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:9"
+  },
+  "c_thorax-lh_coxa-pitch": {
+   "deg": 24.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:10"
+  },
+  "c_thorax-lh_coxa-roll": {
+   "deg": 134.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:11"
+  },
+  "c_thorax-lh_coxa-yaw": {
+   "deg": 3.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:12"
+  },
+  "c_thorax-lm_coxa-pitch": {
+   "deg": 8.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:13"
+  },
+  "c_thorax-lm_coxa-roll": {
+   "deg": 87.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:14"
+  },
+  "c_thorax-lm_coxa-yaw": {
+   "deg": -10.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:15"
+  },
+  "lf_coxa-lf_trochanterfemur-pitch": {
+   "deg": -139.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:16"
+  },
+  "lf_coxa-lf_trochanterfemur-roll": {
+   "deg": -15.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:17"
+  },
+  "lf_tarsus1-lf_tarsus2-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:18"
+  },
+  "lf_tarsus2-lf_tarsus3-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:19"
+  },
+  "lf_tarsus3-lf_tarsus4-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:20"
+  },
+  "lf_tarsus4-lf_tarsus5-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:21"
+  },
+  "lf_tibia-lf_tarsus1-pitch": {
+   "deg": -10.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:22"
+  },
+  "lf_trochanterfemur-lf_tibia-pitch": {
+   "deg": 78.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:23"
+  },
+  "lh_coxa-lh_trochanterfemur-pitch": {
+   "deg": -111.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:24"
+  },
+  "lh_coxa-lh_trochanterfemur-roll": {
+   "deg": 4.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:25"
+  },
+  "lh_tarsus1-lh_tarsus2-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:26"
+  },
+  "lh_tarsus2-lh_tarsus3-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:27"
+  },
+  "lh_tarsus3-lh_tarsus4-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:28"
+  },
+  "lh_tarsus4-lh_tarsus5-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:29"
+  },
+  "lh_tibia-lh_tarsus1-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:30"
+  },
+  "lh_trochanterfemur-lh_tibia-pitch": {
+   "deg": 101.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:31"
+  },
+  "lm_coxa-lm_trochanterfemur-pitch": {
+   "deg": -139.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:32"
+  },
+  "lm_coxa-lm_trochanterfemur-roll": {
+   "deg": 15.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:33"
+  },
+  "lm_tarsus1-lm_tarsus2-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:34"
+  },
+  "lm_tarsus2-lm_tarsus3-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:35"
+  },
+  "lm_tarsus3-lm_tarsus4-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:36"
+  },
+  "lm_tarsus4-lm_tarsus5-pitch": {
+   "deg": -5.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:37"
+  },
+  "lm_tibia-lm_tarsus1-pitch": {
+   "deg": -20.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:38"
+  },
+  "lm_trochanterfemur-lm_tibia-pitch": {
+   "deg": 103.0,
+   "source": "src/flygym/assets/model/neuromechfly/pose/neutral/yaw_pitch_roll.yaml:39"
+  }
+ }
+}
