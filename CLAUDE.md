@@ -18,6 +18,7 @@
 |---|---|
 | `body/` | Blender 초파리 몸 **헤드리스 정본 스크립트**(blender 세션 제작). `gen_fly.py`(메인) · `fly_mesh/fly_body/fly_limbs/fly_wing/fly_tex.py` · `fly_rig.py` · `fly_nmf.py`(flygym MJCF 관절 축·한계) · `apply_joint_angles.py` · `render_fly.py` · `check_baked.py` · `nmf/`(규격 추출·예제 생성·애니 검사) · `examples/`(flygym 관절각 csv/npz, 날갯짓 CPG csv) · `초파리.blend/.fbx` · `Textures/` |
 | `brain/shiu/` | Shiu 모델 실행 스크립트: `smoke_test.py`(0.1초 동작 확인) · `sugar_test.py`(당 뉴런 23개 150Hz 1초 → 상위 반응) · `analyze_sugar.py`(자극 뉴런 뺀 하류 반응) |
+| `insta/` | 초파리 전용 인스타 계정 브라우저 자동화(Playwright). `common.py`(프로필·실행 설정) · `login.py`(창 띄우고 사장님이 **직접** 로그인할 때까지 대기) · `probe_reels.py`(릴스 화면 구조 탐색, 좋아요 안 누름) |
 
 - 뼈대: 뼈 61개, 이름이 NeuroMechFly v2 body 이름과 같다 — `Thorax, Head, LAntenna, RAntenna, LWing, RWing, LHaltere, RHaltere, A1A2, A3~A6` + 다리 `LF/LM/LH/RF/RM/RH` × `Coxa, Femur, Tibia, Tarsus1~5`. 축 +X 앞·+Y 왼·Z 위, 1 단위 = 1mm.
 - 클립: `Walk_Tripod`(30f) · `Idle_Groom`(60f). 날개 3축·관절 한계·`Flight_Wingbeat`는 blender 세션이 확장 중(아래).
@@ -31,6 +32,7 @@
 | `flygym/` | github.com/NeLy-EPFL/flygym | NeuroMechFly v2 몸(MuJoCo) |
 | `male-cns-v1.0/` | male-cns.janelia.org/download (CC-BY) | 수컷 전체 CNS 커넥톰 평면 파일: 주석 21만 행·연결 가중치 1.5억 행(1.1GB) |
 | `flybody-blender` | → `~/GitHub/FlyKing/body` 링크 | 옛 경로 호환용 |
+| `insta/` | 직접 만듦 | `.venv`(uv, Python 3.11, playwright 1.62) · `profile/`(로그인 쿠키 — **비밀번호·세션은 git·메모리에 절대 넣지 않는다**) · `results/` |
 
 ## 환경·실행
 - 뇌 모델 환경: `~/flybrain/shiu-brain-model/.venv`(uv, Python 3.10, brian2 2.5.1, numpy 1.24, **setuptools<70**(없으면 pkg_resources 오류), **cython<3**(3이면 brian2가 numpy 방식으로 떨어져 4배 느림)).
