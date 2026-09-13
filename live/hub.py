@@ -52,6 +52,7 @@ BRAIN_EVAL = ROOT / "brain" / "visual" / "brain_eval.py"
 CALIB = ROOT / "brain" / "visual" / "calibration.json"
 BRAIN_DIR = RESULTS_DIR / "brain"
 NEUTRAL_WATCH_S = 5.0
+BRAIN_SETTLE_S = 1.3        # 릴스로 넘어온 뒤(허브 next()가 이미 약 0.7초 기다림) 캡처 전 추가 대기 — 기준 릴스 캡처 시점(약 2초)과 맞춤
 LIKE_EXTRA_WATCH_S = 5.0
 
 # 화면에서 가장 많이 보이는 video를 cover 맞춤으로 JPEG 추출(2026-09-13 확인: canvas 오염 없음, 1장 약 67ms).
@@ -259,6 +260,9 @@ class Hub:
         return {"watch": watch, "like_at": like_at, "judge": {"verdict": "random", "reason": f"무작위 규칙(좋아요 확률 {self.args.like_prob})"}}
 
     async def brain_plan(self, src, info, rid, t_start):
+        # 기준 릴스(capture_clips.py)는 넘긴 뒤 약 2초 뒤 첫 1초를 캡처했다. 허브도 같은 시점에 캡처해야 보정 문턱과 맞는다.
+        # (2026-09-13: 바로 캡처하면 넘기는 화면 전환·영상 시작 밝아짐이 다가옴으로 잡혀 거대섬유 도주가 5개 중 4개로 과다)
+        await asyncio.sleep(BRAIN_SETTLE_S)
         await self.send_all({"type": "brain", "id": rid, "status": "capturing"})
         frames = await src.capture(self.args.brain_seconds, self.args.brain_fps)
         await self.send_all({"type": "brain", "id": rid, "status": "computing"})
