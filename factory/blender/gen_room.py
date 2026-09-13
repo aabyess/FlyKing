@@ -6,6 +6,7 @@
   wall_steel      폭 100 · 높이 60 강철 골판 벽, 아래 경고 띠, 위 철골 보
   pillar_h        H형 강철 기둥 높이 150, 받침판 20×20, 아래 경고 띠
   lamp_hanging    지름 32 전등갓 + 전구 + 줄(위로 200) — 원점은 전등갓 아래
+  gate_steel      폭 190 · 높이 72 강철 셔터 문(가로 살 10장 · 아래 경고 띠 · 세로 보강대) — 원점은 아래 가운데. 괴물이 부수면 유니티가 쓰러뜨린다
 텍스처는 PNG로 저장하고 유니티(FactoryGame.DressMaterials)가 재질 이름으로 입힌다.
 """
 import math
@@ -245,7 +246,19 @@ def lamp_hanging():
     return p.build()
 
 
-objs = [floor_concrete(), wall_steel(), pillar_h(), lamp_hanging()]
+def gate_steel():
+    p = Part("gate_steel")
+    for k in range(10):                                                  # 셔터 가로 살
+        z0 = 5.0 + k * 6.7
+        p.box((-95, -2.5, z0 + 0.3), (95, 2.5, z0 + 6.4), MAT["강철벽"], uv_size=(100, 6.7), origin=(-95, z0))
+    p.box((-95, -2.9, 0), (95, 2.9, 5), MAT["경고띠"], uv_size=(50, 12.5), origin=(-95, 0))
+    for x in (-60, 0, 60):                                               # 세로 보강대
+        p.box((x - 2, -3.4, 0), (x + 2, 3.4, 72), MAT["철골"])
+    p.box((-97, -3.6, 70), (97, 3.6, 74), MAT["철골"])
+    return p.build()
+
+
+objs = [floor_concrete(), wall_steel(), pillar_h(), lamp_hanging(), gate_steel()]
 
 for ob in objs:
     bpy.ops.object.select_all(action="DESELECT")

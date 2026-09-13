@@ -176,6 +176,41 @@ for side, sgn in (("L", 1), ("R", -1)):
     shell(f"갑옷3_어깨_{side}", pc, (TH_H.x * 0.33, TH_H.y * 0.3, TH_H.z * 0.38), pc[2] - TH_H.z * 0.05, MAT["금"], "Thorax", thickness=0.03)
 helmet(3, MAT["금"], MAT["금_테"], crest=True)
 
+# 병정 초파리 장비: 오른 어깨에 멘 소총(총구가 머리 앞) + 철모. 유니티가 이름 앞머리 「병정_」으로 켠다(갑옷 2단계부터는 철모 대신 갑옷 투구).
+MAT["총몸"] = material("병정_총몸", (0.12, 0.12, 0.13), 0.8, 0.4)
+MAT["총열"] = material("병정_총열", (0.25, 0.25, 0.27), 1.0, 0.3)
+MAT["개머리"] = material("병정_개머리", (0.32, 0.20, 0.10), 0.0, 0.7)
+MAT["조준경"] = material("병정_조준경", (0.04, 0.04, 0.045), 0.6, 0.3)
+MAT["철모"] = material("병정_철모", (0.24, 0.28, 0.16), 0.0, 0.8)
+G_TOP = TH_C.z + TH_H.z * 1.12                                  # 가슴 윗면 위(날개 뿌리 z≈1.01보다 높게)
+G_Y = -TH_H.y * 0.62                                            # 오른 어깨(−Y)
+G_X0 = TH_C.x - TH_H.x * 0.55                                   # 개머리 끝
+G_FRONT = HD_C.x + HD_H.x                                       # 머리 앞 끝
+
+
+def gun_cyl(name, x0, x1, y, z, r, key):
+    bm = bmesh.new()
+    res = bmesh.ops.create_cone(bm, cap_ends=True, segments=12, radius1=r, radius2=r, depth=x1 - x0)
+    rot = Vector((1.0, 0.0, 0.0)).to_track_quat("Z", "Y").to_matrix().to_4x4()
+    bmesh.ops.transform(bm, matrix=Matrix.Translation(((x0 + x1) / 2, y, z)) @ rot, verts=res["verts"])
+    finish(name, bm, MAT[key], "Thorax")
+
+
+box("병정_개머리", (G_X0, G_Y - 0.07, G_TOP - 0.05), (G_X0 + 0.45, G_Y + 0.07, G_TOP + 0.13), MAT["개머리"], "Thorax")
+box("병정_총몸", (G_X0 + 0.45, G_Y - 0.09, G_TOP - 0.02), (G_X0 + 1.25, G_Y + 0.09, G_TOP + 0.2), MAT["총몸"], "Thorax")
+box("병정_탄창", (G_X0 + 0.85, G_Y - 0.06, G_TOP - 0.3), (G_X0 + 1.0, G_Y + 0.06, G_TOP - 0.02), MAT["총몸"], "Thorax")
+gun_cyl("병정_총열", G_X0 + 1.25, G_FRONT + 0.55, G_Y, G_TOP + 0.1, 0.04, "총열")
+gun_cyl("병정_소염기", G_FRONT + 0.55, G_FRONT + 0.7, G_Y, G_TOP + 0.1, 0.065, "총몸")
+gun_cyl("병정_조준경", G_X0 + 0.6, G_X0 + 1.05, G_Y, G_TOP + 0.3, 0.055, "조준경")
+bm = bmesh.new()
+bmesh.ops.create_uvsphere(bm, u_segments=8, v_segments=6, radius=0.03)
+bmesh.ops.translate(bm, vec=Vector((G_FRONT + 0.72, G_Y, G_TOP + 0.1)), verts=bm.verts[:])
+finish("병정_총구", bm, MAT["총몸"], "Thorax")                 # 총알이 나가는 자리(유니티 FireBullet)
+H_C = (HD_C.x - 0.03, 0.0, HD_C.z)
+H_R = (HD_H.x * 1.18, HD_H.y * 1.04, HD_H.z * 1.14)
+shell("병정_철모", H_C, H_R, HD_C.z + HD_H.z * 0.4, MAT["철모"], "Head", thickness=0.035)
+ring("병정_철모테", H_C, H_R, HD_C.z + HD_H.z * 0.4 + 0.005, 0.03, MAT["철모"], "Head")
+
 arm.data.pose_position = "POSE"
 bpy.context.view_layer.update()
 armor = [o for o in bpy.data.objects if o.name.startswith("갑옷")]
@@ -201,6 +236,13 @@ for tier in (1, 2, 3):
         o.hide_render = not o.name.startswith(f"갑옷{tier}_")
     scene.render.filepath = f"{OUT_PNG}_{tier}.png"
     bpy.ops.render.render(write_still=True)
+cam.location = (5.0, -1.2, 2.6)                                # 오른쪽 앞에서 — 창·방패가 함께 보이게
+cam.rotation_euler = (Vector((0.4, 0.0, 0.6)) - cam.location).to_track_quat("-Z", "Y").to_euler()
+cam_data.lens = 38
+for o in armor:
+    o.hide_render = True                                         # 병정 미리보기: 갑옷 없이 철모·소총만
+scene.render.filepath = f"{OUT_PNG}_soldier.png"
+bpy.ops.render.render(write_still=True)
 for o in armor:
     o.hide_render = False
 bpy.data.objects.remove(cam)

@@ -18,7 +18,7 @@ using UnityEngine;
 /// </summary>
 public enum StationKind { Sorter, Guard, Sugar }
 
-public class Fly
+public partial class Fly
 {
     public int seed;
     public string name;
@@ -49,7 +49,7 @@ public class Fly
     public readonly List<(int tier, GameObject go)> armor = new List<(int, GameObject)>();
 }
 
-public class Station
+public partial class Station
 {
     public StationKind kind;
     public int number;
@@ -78,7 +78,7 @@ public class Station
 }
 
 [RequireComponent(typeof(BrainClient))]
-public class FactoryGame : MonoBehaviour
+public partial class FactoryGame : MonoBehaviour
 {
     const double SortRight = 4, SortWrong = -2, IntruderLoss = -30, FalseAlarmLoss = -3, DeliveryPay = 10, SugarCostPerHz = 0.02;
     const float Cycle = 2.5f, CellX = 380f, CellZ = 280f, IntruderWindow = 4f, IntruderMean = 20f, GfThreshold = 60f, Mn9Ref = 71f;
@@ -144,6 +144,7 @@ public class FactoryGame : MonoBehaviour
             int[] g = { 1, 2, 3, 3 };
             for (int i = 0; i < 4; i++) { flies[i].gear = g[i]; ApplyGear(flies[i]); }
         }
+        StartDefense();
         nextIntruderAt = Time.time + Exp(IntruderMean);
         Invoke(nameof(LogScene), 3f);
     }
@@ -157,6 +158,8 @@ public class FactoryGame : MonoBehaviour
             if (args[i] == "-shotAfter" && float.TryParse(args[i + 1], out float s)) shotAt = s;
             if (args[i] == "-shotDir") shotDir = args[i + 1];
             if (args[i] == "-testGear") testGear = args[i + 1] == "1";
+            if (args[i] == "-testSoldiers") testSoldiers = args[i + 1] == "1";
+            if (args[i] == "-testFactoryHp" && double.TryParse(args[i + 1], out double hp)) factoryHp = hp;
             if (args[i] == "-shotPlan")
                 foreach (var part in args[i + 1].Split(','))
                 {
@@ -194,8 +197,8 @@ public class FactoryGame : MonoBehaviour
         RenderSettings.fog = true;
         RenderSettings.fogMode = FogMode.Linear;
         RenderSettings.fogColor = new Color(0.035f, 0.037f, 0.04f);
-        RenderSettings.fogStartDistance = 1300f;
-        RenderSettings.fogEndDistance = 3200f;
+        RenderSettings.fogStartDistance = 2200f;
+        RenderSettings.fogEndDistance = 4800f;
         QualitySettings.pixelLightCount = 16;
 
         var under = GameObject.CreatePrimitive(PrimitiveType.Plane);
@@ -254,6 +257,7 @@ public class FactoryGame : MonoBehaviour
             for (int k = 0; k < tiles; k++)
             {
                 float t = -roomHalf + k * 100f + 50f;
+                if (Mathf.Abs(t) < GateHalf) continue;   // 사방 문 자리(FactoryGame.Defense.cs)
                 // 카메라 반대쪽 두 벽(−X·−Z)은 온전히, 카메라 쪽 두 벽(+X·+Z)은 낮은 턱 — 방 안이 가려지지 않게
                 PlaceWall(wall, new Vector3(-roomHalf, 0f, t), 90f, wallScale, false);
                 PlaceWall(wall, new Vector3(t, 0f, -roomHalf), 0f, wallScale, false);
@@ -262,7 +266,8 @@ public class FactoryGame : MonoBehaviour
             }
         if (pillar)
             foreach (var at in new[] { new Vector3(-roomHalf, 0, -roomHalf), new Vector3(-roomHalf, 0, roomHalf), new Vector3(roomHalf, 0, -roomHalf),
-                                       new Vector3(-roomHalf, 0, 0), new Vector3(0, 0, -roomHalf) })
+                                       new Vector3(-roomHalf, 0, -GateHalf - 12), new Vector3(-roomHalf, 0, GateHalf + 12),
+                                       new Vector3(-GateHalf - 12, 0, -roomHalf), new Vector3(GateHalf + 12, 0, -roomHalf) })
             {
                 var p = Instantiate(pillar, at, Quaternion.identity, worldRoot);
                 FitWidth(p, 20f, "기둥");
@@ -288,6 +293,7 @@ public class FactoryGame : MonoBehaviour
             spot.color = new Color(1f, 0.86f, 0.66f);
             spot.shadows = LightShadows.Soft;
         }
+        BuildYardAndGates(tileScale);
         DressMaterials(worldRoot.gameObject);
     }
 
@@ -376,10 +382,10 @@ public class FactoryGame : MonoBehaviour
                 if (spec.tex != null) m.mainTexture = Resources.Load<Texture2D>("Models/Textures/" + spec.tex);
                 if (m.HasProperty("_Metallic")) m.SetFloat("_Metallic", spec.metal * 0.35f);   // 반사 프로브가 없어 금속 그대로면 검게 보인다
                 if (m.HasProperty("_Glossiness")) m.SetFloat("_Glossiness", 1f - spec.rough);
-                if (key == "공장_전구")
+                if (key == "공장_전구" || key.EndsWith("눈"))                   // 전구·괴물 눈은 스스로 빛난다
                 {
                     m.EnableKeyword("_EMISSION");
-                    m.SetColor("_EmissionColor", new Color(1f, 0.82f, 0.55f) * 2.5f);
+                    m.SetColor("_EmissionColor", (key == "공장_전구" ? new Color(1f, 0.82f, 0.55f) : spec.linear) * 2.5f);
                 }
             }
     }
@@ -538,9 +544,9 @@ public class FactoryGame : MonoBehaviour
     }
 
     // ---------------- 초파리 ----------------
-    Fly AddFly(Station st)
+    Fly AddFly(Station st, bool soldier = false)
     {
-        var f = new Fly { seed = nextSeed++, name = names[flies.Count % names.Length] };
+        var f = new Fly { seed = nextSeed++, name = names[flies.Count % names.Length], soldier = soldier };
         flies.Add(f);
         var prefab = Resources.Load<GameObject>("Models/초파리_장비") ?? Resources.Load<GameObject>("Models/초파리");
         if (prefab != null)
@@ -565,6 +571,7 @@ public class FactoryGame : MonoBehaviour
         foreach (var t in f.go.GetComponentsInChildren<Transform>(true))
             if (t.name.StartsWith("갑옷") && t.name.Length > 2 && char.IsDigit(t.name[2]))
                 f.armor.Add((t.name[2] - '0', t.gameObject));
+            else if (t.name.StartsWith("병정_")) f.soldierGear.Add(t.gameObject);
         DressMaterials(f.go);
         ApplyGear(f);
         f.anim = f.go.GetComponentInChildren<Animation>();
@@ -588,13 +595,19 @@ public class FactoryGame : MonoBehaviour
         grain.SetActive(false);
         f.carry = grain.transform;
         Assign(f, st);
-        SendAptitude(f);
+        if (soldier)
+        {
+            f.aptDone = true;
+            f.aptText = "병정 초파리 — 작업대 적성 검사 없음";
+        }
+        else SendAptitude(f);
         return f;
     }
 
     static void ApplyGear(Fly f)
     {
         foreach (var (tier, go) in f.armor) go.SetActive(tier == f.gear);
+        ApplySoldierGear(f);
     }
 
     void SendAptitude(Fly f)
@@ -621,6 +634,7 @@ public class FactoryGame : MonoBehaviour
         int idle = 0;
         foreach (var f in flies)
         {
+            if (f.soldier) continue;
             Vector3 spot, target;
             if (f.station != null)
             {
@@ -663,6 +677,7 @@ public class FactoryGame : MonoBehaviour
     {
         foreach (var f in flies)
         {
+            if (f.soldier) continue;   // 병정은 UpdateSoldier
             var st = f.station;
             Vector3 pos = f.home;
             Quaternion rot = f.homeRot;
@@ -773,6 +788,11 @@ public class FactoryGame : MonoBehaviour
         string id = MiniJson.Text(m, "id");
         if (!waiting.TryGetValue(id, out var w)) return;
         waiting.Remove(id);
+        if (w.st == null)
+        {
+            OnSoldierBrain(w.fly, type, m);
+            return;
+        }
         var fly = w.fly;
         var st = w.st;
         fly.pending = false;
@@ -889,6 +909,7 @@ public class FactoryGame : MonoBehaviour
         foreach (var st in stations)
         {
             if (st.fly != null && st.fly.pending && now - st.fly.pendingSince > 30f) st.fly.pending = false;   // 서버가 끊겼을 때 복구
+            if (gameOver || now < st.blockedUntil) continue;   // 괴물이 작업대를 부수는 중이거나 게임 오버
             switch (st.kind)
             {
                 case StationKind.Sorter: TickSorter(st, now, dt); break;
@@ -897,6 +918,7 @@ public class FactoryGame : MonoBehaviour
             }
         }
         UpdateFlies(now, dt);
+        UpdateDefense(now, dt);
         UpdateCamera(dt);
     }
 
@@ -911,7 +933,13 @@ public class FactoryGame : MonoBehaviour
         if (shotIndex < shotPlan.Count && !string.IsNullOrEmpty(shotDir))
         {
             var (at, view) = shotPlan[shotIndex];
-            if (now >= at - 2.5f) focus = view == "all" ? -1 : int.TryParse(view.TrimStart('s'), out int n) && n < stations.Count ? n : -1;
+            if (now >= at - 2.5f)
+            {
+                ClearDefenseFocus();
+                if (view == "fight") focusFight = true;
+                else if (view.StartsWith("gate") && int.TryParse(view.Substring(4), out int gi)) focusGate = gi;
+                focus = view == "all" || focusFight || focusGate >= 0 ? -1 : int.TryParse(view.TrimStart('s'), out int n) && n < stations.Count ? n : -1;
+            }
             if (now >= at)
             {
                 ScreenCapture.CaptureScreenshot(Path.Combine(shotDir, $"shot_{shotIndex}_{view}.png"));
@@ -926,7 +954,7 @@ public class FactoryGame : MonoBehaviour
             eventShotsDone.Add(eventShotName);
             eventShotAt = -1f;
         }
-        if (planDoneAt > 0 && eventShotAt < 0 && (eventShotsDone.Count >= 2 || now - planDoneAt > 90f))
+        if (planDoneAt > 0 && eventShotAt < 0 && (eventShotsDone.Count >= ExpectedEventShots || now - planDoneAt > 90f))
         {
             planDoneAt = -1f;
             Invoke(nameof(QuitNow), 2.5f);
@@ -937,6 +965,7 @@ public class FactoryGame : MonoBehaviour
     {
         if (string.IsNullOrEmpty(shotDir) || planDoneAt < 0 || eventShotAt > 0 || eventShotsDone.Contains(name)) return;
         focus = stations.IndexOf(st);
+        ClearDefenseFocus();
         camInit = false;   // 카메라를 그 작업대로 바로 옮긴다
         eventShotName = name;
         eventShotAt = Time.time + delay;
@@ -945,7 +974,11 @@ public class FactoryGame : MonoBehaviour
     void UpdateCamera(float dt)
     {
         for (int k = 0; k <= 9; k++)
-            if (Input.GetKeyDown(KeyCode.Alpha0 + k)) focus = k == 0 ? -1 : Mathf.Min(k - 1, stations.Count - 1);
+            if (Input.GetKeyDown(KeyCode.Alpha0 + k))
+            {
+                focus = k == 0 ? -1 : Mathf.Min(k - 1, stations.Count - 1);
+                ClearDefenseFocus();
+            }
         if (Input.GetMouseButton(1))
         {
             camYaw += Input.GetAxis("Mouse X") * 4f;
@@ -954,10 +987,15 @@ public class FactoryGame : MonoBehaviour
         float wheel = Input.GetAxis("Mouse ScrollWheel");
         Vector3 target;
         float wantDist;
-        if (focus < 0 || focus >= stations.Count)
+        if (DefenseCameraTarget(out Vector3 defTarget, out float defDist))
+        {
+            target = defTarget;
+            wantDist = defDist;
+        }
+        else if (focus < 0 || focus >= stations.Count)
         {
             target = new Vector3(0f, 10f, 0f);
-            wantDist = roomHalf * 2.3f;
+            wantDist = (roomHalf + YardWidth * 0.45f) * 2.3f;
         }
         else
         {
@@ -966,7 +1004,7 @@ public class FactoryGame : MonoBehaviour
             wantDist = 230f;
         }
         wantDist *= Mathf.Exp(-wheel * 2f);
-        float wantYaw = camYaw + (focus < 0 ? -48f : 0f);
+        float wantYaw = !float.IsNaN(defenseYaw) ? defenseYaw : camYaw + (focus < 0 ? -48f : 0f);
         if (!camInit)
         {
             camTarget = target;
@@ -980,7 +1018,7 @@ public class FactoryGame : MonoBehaviour
         yawNow = Mathf.LerpAngle(yawNow, wantYaw, Mathf.Clamp01(dt * 4f));
         // 오른쪽 작업대 판이 화면 1/3을 가리므로 보는 점을 화면 왼쪽으로 옮긴다
         Vector3 aim = camTarget + Quaternion.Euler(0f, yawNow, 0f) * Vector3.right * camDist * (focus < 0 ? 0.16f : 0.12f);
-        cam.transform.position = aim + Quaternion.Euler(focus < 0 ? camPitch + 12f : camPitch, yawNow, 0f) * new Vector3(0, 0, -camDist);
+        cam.transform.position = aim + Quaternion.Euler(!float.IsNaN(defenseYaw) ? camPitch + 23f : focus < 0 ? camPitch + 12f : camPitch, yawNow, 0f) * new Vector3(0, 0, -camDist);
         cam.transform.LookAt(aim);
     }
 
@@ -1122,7 +1160,7 @@ public class FactoryGame : MonoBehaviour
         GUI.color = Color.white;
         double perMin = income.Sum(x => x.v);
 
-        GUILayout.BeginArea(new Rect(14, 14, 460, 440), GUI.skin.box);
+        GUILayout.BeginArea(new Rect(14, 14, 460, Mathf.Min(780, Screen.height - 28)), GUI.skin.box);
         GUILayout.Label("초파리 공장", title);
         GUILayout.Label($"돈 <b>{money:0}원</b>   최근 1분 {perMin:+0;-0;0}원", body);
         GUILayout.Label(brain.Connected ? $"뇌 서버 연결됨 · 계산 프로세스 {brain.WorkersReady}/{brain.Workers} · 대기열 {brain.Queue}" : "뇌 서버 연결 기다리는 중(factory/server/brain_server.py)", small);
@@ -1140,7 +1178,7 @@ public class FactoryGame : MonoBehaviour
                 money -= StationCost;
                 stationsBought++;
                 var st = AddStation(kind);
-                var idle = flies.FirstOrDefault(f => f.station == null);
+                var idle = flies.FirstOrDefault(f => f.station == null && !f.soldier);
                 if (idle != null) Assign(idle, st);
                 else AddFly(st);
                 PlaceFlies();
@@ -1149,8 +1187,9 @@ public class FactoryGame : MonoBehaviour
         GUILayout.EndHorizontal();
         GUILayout.Label($"설탕 농도(당 감각뉴런 자극) {sugarHz:0}Hz · 한 번에 {sugarHz * SugarCostPerHz:0.0}원", small);
         sugarHz = Mathf.Round(GUILayout.HorizontalSlider(sugarHz, 50f, 200f) / 10f) * 10f;
-        var idleFlies = flies.Where(f => f.station == null).ToList();
+        var idleFlies = flies.Where(f => f.station == null && !f.soldier).ToList();
         if (idleFlies.Count > 0) GUILayout.Label("쉬는 초파리: " + string.Join(", ", idleFlies.Select(f => f.name)), small);
+        DefenseGUI();
         GUILayout.EndArea();
 
         float w = 520, x = Screen.width - w - 14;
@@ -1162,7 +1201,7 @@ public class FactoryGame : MonoBehaviour
             var f = st.fly;
             GUILayout.Label($"<b>{i + 1}. {st.Name}</b> — {(f != null ? $"{f.name} (개체 {f.seed})" : "초파리 없음")}", body);
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("보기", GUILayout.Width(60))) focus = i;
+            if (GUILayout.Button("보기", GUILayout.Width(60))) { focus = i; ClearDefenseFocus(); }
             if (GUILayout.Button("초파리 바꾸기", GUILayout.Width(120))) Swap(st);
             if (st.kind == StationKind.Sorter && f != null)
             {
@@ -1204,13 +1243,16 @@ public class FactoryGame : MonoBehaviour
             }
             GUILayout.Space(8);
         }
+        SoldierRowsGUI(w);
         GUILayout.EndScrollView();
         GUILayout.EndArea();
+        DefenseWorldGUI();
+        GameOverGUI();
     }
 
     void Swap(Station st)
     {
-        var idle = flies.FirstOrDefault(f => f.station == null);
+        var idle = flies.FirstOrDefault(f => f.station == null && !f.soldier);
         if (idle != null)
         {
             Assign(idle, st);

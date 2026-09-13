@@ -64,3 +64,51 @@ def guard(kind, seconds=0.5, fps=10.0, seed=0):
 
 def sugar(seconds=0.5, fps=10.0, seed=0):
     return _rgb(np.full((int(round(seconds * fps)), H, W), BELT))
+
+
+FLOOR, DARK_WALL, MONSTER = 110.0, 70.0, 15.0
+
+
+def soldier(kind, side="left", seconds=0.5, fps=10.0, seed=0):
+    """병정 초파리 앞 공장 바닥(110)·어두운 벽(70).
+
+    ant    = 좀비 개미: 작은 검은 몸(가로 22px ≈ 11°) + 다리 6개가 side 가장자리에서 가운데 쪽으로 걸어 들어온다(약 110px/s).
+             분류대 상자(26px, 124px/s)와 같은 「작게 움직이는 것」 — 다가가기(oDN1·P9) 확인용.
+    spider = 거미 괴물: side 쪽에서 다리 달린 검은 원이 덮치듯 커진다(루밍 l/v 40ms, 창 끝 무렵 충돌) — 거대섬유 확인용.
+    none   = 빈 바닥.
+    side: left(화면 왼쪽 절반) · right(오른쪽 절반).
+    """
+    rng = np.random.default_rng(seed)
+    n = int(round(seconds * fps))
+    yy, xx = np.mgrid[0:H, 0:W]
+    sgn = -1.0 if side == "left" else 1.0
+    frames = np.full((n, H, W), FLOOR)
+    frames[:, : int(H * 0.35)] = DARK_WALL
+    if kind == "ant":
+        y0 = H * 0.62 + rng.uniform(-8, 8)
+        x_edge = W / 2 + sgn * (W / 2 + 6)
+        for k in range(n):
+            t = k / fps
+            cx = x_edge - sgn * 110.0 * t
+            body = ((xx - cx) / 11.0) ** 2 + ((yy - y0) / 7.0) ** 2 < 1.0
+            frames[k][body] = MONSTER
+            phase = 1.0 if k % 2 == 0 else -1.0                                   # 다리가 번갈아 앞뒤로(깜빡이는 움직임)
+            for j, dy in enumerate((-6.0, 0.0, 6.0)):
+                for s in (-1.0, 1.0):
+                    lx = cx + (dy + phase * (2.0 if j % 2 == 0 else -2.0))
+                    leg = (np.abs(xx - lx) < 1.2) & (np.abs(yy - (y0 + s * 11.0)) < 4.5)
+                    frames[k][leg] = MONSTER
+    elif kind == "spider":
+        cx, cy = W / 2 + sgn * W * 0.25 + rng.uniform(-6, 6), H * 0.5 + rng.uniform(-15, 15)
+        t_hit = seconds + 0.02 + rng.uniform(-0.03, 0.05)
+        ang_img = np.arctan2(yy - cy, xx - cx)
+        dist = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2)
+        for k in range(n):
+            ttc = max(t_hit - k / fps, 0.02)
+            ang = np.degrees(2 * np.arctan(0.04 / ttc))
+            r = min(ang, 170) / 70.0 * W / 2
+            frames[k][dist < r] = MONSTER
+            for a in np.linspace(-np.pi, np.pi, 8, endpoint=False) + np.pi / 8:   # 다리 8개(몸 반지름의 1.8배까지)
+                d_ang = np.abs(np.angle(np.exp(1j * (ang_img - a))))
+                frames[k][(dist < r * 1.8) & (dist * d_ang < max(1.5, r * 0.12))] = MONSTER
+    return _rgb(frames)

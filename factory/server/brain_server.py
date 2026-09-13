@@ -44,12 +44,16 @@ WINDOW_S = 0.5
 GF_THRESHOLD_HZ = 60.0            # von Reyn 2014 거대섬유 도주; 문턱은 embodied brain_body_bridge 0.3×200Hz
 MN9_REF_HZ = 71.0                 # 당 감각뉴런 200Hz 때 MN9 평균(reflex_probe sugar)
 SORTER_DEFAULT_THRESHOLD = 21.3   # 적성 검사 전 기본 레버 문턱 = 밝은 상자 22.5·어두운 상자 20.1Hz 평균의 가운데
+SOLDIER_FIRE_HZ = 5.0             # 병정 방아쇠 문턱 = soldier_probe.json 빈 바닥 0.1Hz와 좀비 개미(오른쪽) 9.9Hz의 가운데(왼쪽 개미 21.5Hz)
 RULES = {
     "sorter": {"neuron": "다가가기 oDN1·P9 평균 발화",
                "rule": "≥ 이 초파리 레버 문턱이면 레버를 밀어 상자를 A통(밝은 상자)으로. 어두운 상자에 더 다가가는 개체는 공장이 레버를 반대로 연결",
                "source": "Bidaye et al. 2020 Neuron 108:469 — 전진 명령 뉴런"},
     "guard": {"neuron": "거대섬유 DNp01 50ms 창 최고 발화", "rule": f"≥ {GF_THRESHOLD_HZ}Hz면 경보", "threshold": GF_THRESHOLD_HZ,
               "source": "von Reyn et al. 2014 Nat Neurosci 17:962 — 루밍 도약 도주"},
+    "soldier": {"neuron": "거대섬유 DNp01 50ms 최고 · 다가가기 oDN1·P9 평균 · 방향 틀기 DNa02 왼쪽−오른쪽",
+                "rule": f"거대섬유 ≥ {GF_THRESHOLD_HZ}Hz면 도망(도약), 아니면 다가가기 ≥ {SOLDIER_FIRE_HZ}Hz면 방아쇠(조준 = 방향 틀기 부호), 둘 다 아니면 제자리. 총은 게임 소품",
+                "source": "von Reyn et al. 2014(루밍 도주) · Bidaye et al. 2020(전진 명령) · Chen et al. 2023(DNa02 방향 틀기)"},
     "sugar": {"neuron": "MN9 주둥이 운동뉴런 평균 발화", "rule": f"÷ {MN9_REF_HZ}Hz(당 200Hz 때) = 운반 속도 배수(최대 1.5)",
               "ref": MN9_REF_HZ, "source": "Shiu et al. 2024 Nature — 당 → 섭식 운동뉴런"},
 }
@@ -79,6 +83,9 @@ def worker_main(jobs, results, wid):
                 frames = stimuli.sorter(p.get("box", "none"), WINDOW_S, FPS, seed)
             elif st == "guard":
                 frames = stimuli.guard(p.get("event", "none"), WINDOW_S, FPS, seed)
+            elif st == "soldier":
+                # 멀리 있는 괴물은 작게 움직이는 점(small → 개미 장면), 가까이 덮치는 거미는 루밍(loom → 거미 장면)
+                frames = stimuli.soldier({"small": "ant", "loom": "spider"}.get(p.get("view"), "none"), p.get("side", "left"), WINDOW_S, FPS, seed)
             elif st == "sugar":
                 frames = stimuli.sugar(WINDOW_S, FPS, seed)
                 sugar_hz = float(p.get("sugar_hz", 0.0))
@@ -116,6 +123,22 @@ def judge(job, res):
         reason = f"거대섬유 최고 {v['GF_peak50ms_hz']}Hz {'≥' if alarm else '<'} {GF_THRESHOLD_HZ}Hz → {'경보' if alarm else '경보 없음'}"
         return {"action": "alarm" if alarm else "quiet", "correct": bool(alarm == (ev == "intruder")), "threshold": GF_THRESHOLD_HZ,
                 "outcome": outcome}, reason
+    if st == "soldier":
+        monster, side = p.get("monster", "none"), p.get("side", "left")
+        gf, appr, turn = v["GF_peak50ms_hz"], v["approach_hz"], v["turn_L_minus_R_hz"]
+        if gf >= GF_THRESHOLD_HZ:
+            action, why = "flee", f"거대섬유 최고 {gf}Hz ≥ {GF_THRESHOLD_HZ}Hz → 도약 도주"
+        elif appr >= SOLDIER_FIRE_HZ:
+            action, why = "fire", f"거대섬유 {gf}Hz < {GF_THRESHOLD_HZ}Hz, 다가가기 {appr}Hz ≥ {SOLDIER_FIRE_HZ}Hz → 방아쇠"
+        else:
+            action, why = "hold", f"거대섬유 {gf}Hz · 다가가기 {appr}Hz 둘 다 문턱 아래 → 제자리"
+        turn_to = "left" if turn > 0 else "right" if turn < 0 else "none"
+        name = {"ant": "좀비 개미", "spider": "거미 괴물", "none": "빈 바닥"}.get(monster, monster)
+        where = "가까이 덮침" if p.get("view") == "loom" else "멀리서 움직임"
+        outcome = {"flee": f"{name}({where})를 보고 도망", "fire": f"{name}({where})에게 사격", "hold": f"{name}({where}) 앞에서 가만히"}[action]
+        return {"action": action, "turn": turn_to, "turn_hz": turn, "fire_threshold": SOLDIER_FIRE_HZ, "view": p.get("view", ""),
+                "threshold": GF_THRESHOLD_HZ, "correct": action != "hold" if monster != "none" else action == "hold",
+                "outcome": outcome}, f"{why} · 방향 틀기 {turn:+}Hz"
     speed = round(min(1.5, v["MN9_mean_hz"] / MN9_REF_HZ), 3)
     reason = f"당 {p.get('sugar_hz', 0)}Hz 자극 → MN9 {v['MN9_mean_hz']}Hz ÷ {MN9_REF_HZ}Hz → 운반 속도 ×{speed}"
     return {"action": "carry", "speed": speed, "correct": speed > 0, "threshold": MN9_REF_HZ, "outcome": f"속도 ×{speed}"}, reason
@@ -172,7 +195,7 @@ class Server:
         self.pending[job["key"]] = writer
         if job.get("aptitude"):
             self.low.append(job)
-        elif job.get("station") == "guard" and (job.get("params") or {}).get("event") == "intruder":
+        elif job.get("station") == "soldier" or (job.get("station") == "guard" and (job.get("params") or {}).get("event") == "intruder"):
             job["urgent"] = True
             self.high.appendleft(job)   # 침입자는 4초 안에 판단이 나와야 막는다 — 대기열 맨 앞(실측: 뒤에 서면 막음 1 · 놓침 4)
         else:
