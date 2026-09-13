@@ -33,7 +33,7 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.35;
 
-const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 3000);
+const camera = new THREE.PerspectiveCamera(32, 1, 1.0, 3000);   // near 0.1이면 깊이 정밀도가 모자라 폰 화면·유리가 겹쳐 보임
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
@@ -383,8 +383,15 @@ async function start() {
     if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; if (o.isSkinnedMesh) o.frustumCulled = false; }
   });
   const screenMesh = gltf.scene.getObjectByName('폰_화면');
-  screenMesh.material = new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false });
+  // 화면 판이 검은 앞유리보다 0.01mm만 떠 있고 폰 세트가 0.17배라 깊이가 겹쳐(z-fighting) 유리가 조각조각 비쳤다.
+  // 화면을 로컬 법선(+Y, Blender 로컬 +Z) 쪽으로 띄우고, 깊이 오프셋으로 항상 유리 앞에 그린다.
+  screenMesh.position.y += 0.25;
+  screenMesh.material = new THREE.MeshBasicMaterial({
+    map: screenTex, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4,
+  });
+  screenMesh.renderOrder = 2;
   screenMesh.castShadow = false;
+  screenMesh.receiveShadow = false;
   gltf.scene.updateMatrixWorld(true);
 
   fly.root = gltf.scene.getObjectByName('초파리_뼈대');

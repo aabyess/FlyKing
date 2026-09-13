@@ -423,7 +423,16 @@ class InstaSource:
         return np.stack(frames[:want])
 
     async def read(self):
-        return await self.page.evaluate(READ_JS)
+        """릴스 정보 읽기. 넘기는 중 페이지가 바뀌면 evaluate가 실패할 수 있어 None을 돌려 세션이 다시 읽게 한다.
+        (2026-09-13 사용자 실행에서 릴스 13개 뒤 여기서 예외로 허브 전체가 멈춤.) 창이 닫혔으면 분명히 끝낸다."""
+        try:
+            return await self.page.evaluate(READ_JS)
+        except Exception as e:  # noqa: BLE001
+            if self.page.is_closed() or "closed" in str(e).lower():
+                raise SystemExit("INSTA_WINDOW_CLOSED — 인스타 창이 닫혀 허브를 끝냄") from e
+            log("READ_RETRY", type(e).__name__, str(e).splitlines()[0][:120])
+            await asyncio.sleep(1.0)
+            return None
 
     async def like(self):
         info = await self.read()
