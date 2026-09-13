@@ -46,7 +46,9 @@ def log(*a):
 
 
 class FactoryBrain:
-    def __init__(self, fps=10.0, sigma=None):
+    def __init__(self, fps=10.0, sigma=None, completeness=None, connectivity=None):
+        """completeness·connectivity: 부분망 시험용으로 다른 뉴런 목록·연결 파일을 줄 수 있다(없으면 전뇌)."""
+        import pandas as pd
         from brian2 import Hz, Network, PoissonGroup, Synapses, ms, network_operation
         from model import create_model, default_params
 
@@ -56,7 +58,9 @@ class FactoryBrain:
         os.chdir(be.SHIU)
         try:
             ann = retina_map.load_annotations(("root_id", "cell_type", "cell_class", "super_class", "side"))
-            idx = retina_map.model_index()
+            comp_path = str(completeness or "./Completeness_783.csv")
+            con_path = str(connectivity or "./Connectivity_783.parquet")
+            idx = {int(r): i for i, r in enumerate(pd.read_csv(comp_path, index_col=0).index)}
             ct = ann.cell_type.fillna("")
             self.idx = idx
             rows = []
@@ -79,7 +83,8 @@ class FactoryBrain:
             names = [type_of.get(r, "") or f"_{r}" for r in comp_ids]
             _, self.neuron_type = np.unique(np.array(names), return_inverse=True)
             self.params = dict(default_params)
-            neu, syn, mon = create_model("./Completeness_783.csv", "./Connectivity_783.parquet", self.params)
+            neu, syn, mon = create_model(comp_path, con_path, self.params)
+            self.n_neurons = len(idx)
         finally:
             os.chdir(cwd)
         self.neu, self.syn, self.mon = neu, syn, mon

@@ -179,7 +179,9 @@ class Server:
                 continue
             if not self.high and not self.low:
                 return
-            job = self.high.popleft() if self.high else self.low.popleft()
+            # 게임 판단과 적성 검사를 번갈아 넘긴다 — 한쪽만 계속 밀려 굶지 않게(적성 검사가 끝나야 분류대가 일한다)
+            self.turn = not getattr(self, "turn", False)
+            job = self.low.popleft() if self.low and (self.turn or not self.high) else self.high.popleft()
             self.busy[wid] = True
             self.worker_q[wid].put(job)
 
