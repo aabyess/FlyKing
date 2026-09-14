@@ -100,7 +100,10 @@
 ~/flybrain/shiu-brain-model/.venv/bin/python factory/server/brain_server.py          # 뇌 서버(프로세스 2개, 올라오는 데 약 10초)
 open factory/unity/FlyFactory/Build/FlyFactory.app                                 # 게임(서버에 자동 연결)
 ```
-빌드: `Unity -batchmode -projectPath factory/unity/FlyFactory -executeMethod FactoryBuild.BuildMac -quit`
+빌드: `zsh factory/tools/build_mac.sh` (유니티 배치 모드 `FactoryBuild.BuildMac`)
+검증: `zsh factory/tools/play_check.sh <빈 캡처 폴더> <장수> [게임 인자]` — 뇌 서버와 게임을 함께 켜서 찍고 몸짓·방어 기록(BODY·DEFENSE)과 오류를 요약한다.
+- 게임 인자: `-shotPlan "초:보기,…"`(all · sN 작업대 · fight 싸움 · gateN 문), `-testGear 1`(갑옷 입힌 채 시작), `-testSoldiers 1`(서·동·남 문 병정, 서·북 습격 10초 뒤), `-testFactoryHp N`(내구도 N·병정 없이 — 게임 오버 확인)
+- 조작: 0 전체(대각선) · 1~9 작업대 확대 · 휠 줌 · 오른쪽 드래그 회전
 기록: `~/flybrain/factory/results/decisions.jsonl` — 판단마다 입력 특징·시각 투사 뉴런 입력·반사 뉴런 발화·판정·결과·대기 시간.
 
 ## 폴더
